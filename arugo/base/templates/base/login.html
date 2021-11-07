@@ -1,0 +1,16 @@
+<div>
+    <h1>
+        Login site
+    </h1>
+    <p>
+        Error: {{ error }}
+    </p>
+</div>
+<div>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" id="username" name="username"><br><br>
+        <input type="text" id="password" name="password"><br><br>
+        <input class="button" type="submit" value="SUBMIT">
+    </form>
+</div>

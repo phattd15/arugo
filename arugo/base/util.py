@@ -1,4 +1,4 @@
-from models import Problem
+from .models import Problem
 import json
 from urllib.request import urlopen
 
@@ -25,4 +25,17 @@ def get_latest_submissions(handle, cnt=500):
     URL = 'https://codeforces.com/api/user.status?handle={}&from=1&cnt={}'.format(handle, cnt)
     return read_data(URL)
 
+def represents_int(s):
+    try: 
+        int(s)
+        return True
+    except ValueError:
+        return False
 
+def validate_handle(handle):
+    URL = 'https://codeforces.com/api/user.info?handles=' + handle
+
+    response = urlopen(URL)
+    response_data = json.loads(response.read())
+
+    return response_data['status'] == 'OK'

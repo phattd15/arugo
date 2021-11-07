@@ -28,7 +28,7 @@ class Profile(models.Model):
     virtual_rating = models.IntegerField(default=1400)
     in_progress = models.BooleanField(default=False)
     current_problem = models.CharField(max_length=20, default='Unselected')
-    deadline = models.DateTimeField()
+    deadline = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.handle
