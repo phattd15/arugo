@@ -4,11 +4,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
 
-from .util import represents_int, validate_handle
+from .util import get_challenge, get_latest_submissions, represents_int, validate_handle
 
-# from django.contrib.auth.models import User
-
-# Create your views here.
 from django.http import HttpResponse
 
 def index(request):
@@ -16,6 +13,32 @@ def index(request):
         print(request.user)
         return HttpResponse("Hello, " + str(request.user))
     return HttpResponse("Hello, aurgo.")
+
+def challenge_list(request):
+
+    if request.user.is_authenticated:
+        
+        user = request.user
+        profile = Profile.objects.get(user=user)
+
+        handle = profile.handle
+        rating = profile.virtual_rating
+
+        normalized_rating = rating - rating % 100
+        context = {}
+
+        context['challenges'] = get_challenge(handle, [normalized_rating + delta for delta in [-100, 100, 300]])
+
+        return render(request, 'base/list.html', context)
+
+    else:
+        return redirect('login')
+
+# def in_challenge(request);
+#     if request.user.is_authenticated:
+#         context = []
+#     else:
+#         return redirect('login')
 
 def login_view(request):
     context = {}

@@ -1,6 +1,8 @@
 from .models import Problem
 import json
 from urllib.request import urlopen
+from .models import Problem
+from random import randint
 
 def read_data(url):
     response = urlopen(url)
@@ -39,3 +41,35 @@ def validate_handle(handle):
     response_data = json.loads(response.read())
 
     return response_data['status'] == 'OK'
+
+def submission_to_problem(submission):
+    return {
+        'contest_id': submission['contestId'],
+        'index': submission['problem']['index']
+    }
+
+def get_challenge(handle, rating):
+    latest_data = get_latest_submissions(handle, 1000)
+    latest_data = filter(lambda submission: submission['verdict'] == 'OK', latest_data)
+    problem_id_only = map(submission_to_problem, latest_data)
+    res = []
+
+    for rt in rating:
+        problemset = Problem.objects.filter(rating=rt)
+        rproblem = None
+
+        for iteration in range(20):
+            problem = problemset[randint(0, len(problemset) - 1)]
+
+            if any(pid['contest_id'] == problem.contest_id and pid['index'] == problem.index for pid in problem_id_only):
+                continue
+
+            else:
+                rproblem = problem
+                break
+        
+        res.append(rproblem)
+        
+    return res
+
+
