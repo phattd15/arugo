@@ -27,7 +27,7 @@ def challenge_list(request):
         normalized_rating = rating - rating % 100
         context = {}
 
-        context['challenges'] = get_challenge(handle, [normalized_rating + delta for delta in [-100, 100, 300]])
+        context['challenges'] = get_challenge(handle, [normalized_rating + delta for delta in range(-100, 400, 100)])
 
         return render(request, 'base/list.html', context)
 

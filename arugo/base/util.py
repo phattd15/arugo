@@ -23,7 +23,7 @@ def fetch_problemset():
         p.save()
 
 def get_latest_submissions(handle, cnt=500):
-    cnt = min(cnt, 2000)
+    cnt = min(cnt, 3000)
     URL = 'https://codeforces.com/api/user.status?handle={}&from=1&cnt={}'.format(handle, cnt)
     return read_data(URL)
 
@@ -43,15 +43,12 @@ def validate_handle(handle):
     return response_data['status'] == 'OK'
 
 def submission_to_problem(submission):
-    return {
-        'contest_id': submission['contestId'],
-        'index': submission['problem']['index']
-    }
+    return str(submission['contestId']) + submission['problem']['index']
 
 def get_challenge(handle, rating):
-    latest_data = get_latest_submissions(handle, 1000)
+    latest_data = get_latest_submissions(handle, 2000)
     latest_data = filter(lambda submission: submission['verdict'] == 'OK', latest_data)
-    problem_id_only = map(submission_to_problem, latest_data)
+    problem_id_only = set(map(submission_to_problem, latest_data))
     res = []
 
     for rt in rating:
@@ -61,7 +58,7 @@ def get_challenge(handle, rating):
         for iteration in range(20):
             problem = problemset[randint(0, len(problemset) - 1)]
 
-            if any(pid['contest_id'] == problem.contest_id and pid['index'] == problem.index for pid in problem_id_only):
+            if str(problem.contest_id) + problem.index in problem_id_only:
                 continue
 
             else:
@@ -73,3 +70,16 @@ def get_challenge(handle, rating):
     return res
 
 
+def validate_registration(handle):
+    latest_data = get_latest_submissions(handle, 1)
+    return len(latest_data) > 0 and latest_data[0]['verdict'] == 'COMPILATION_ERROR'
+
+def validate_solution(handle, problem_id):
+    latest_data = get_latest_submissions(handle, 1)
+    return latest_data[0]['verdict'] == 'OK' and str(latest_data[0]['problem']['contestId']) + latest_data[0]['problem']['index'] == problem_id
+
+# def calculate_gains(rating, pr, magnitude=10):
+#     chance = 1 / (1 + 10 ** ((pr - rating) / 100))
+#     sum = magnitude * 5
+
+#     return []
