@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Arugo</title>
+</head>
+
+<body>
+    <div>
+        <a href="{% url 'login' %}"> Login </a>
+        <a href="{% url 'logout' %}"> Logout </a>
+        <a href="{% url 'register' %}"> Register </a>
+        <a href="{% url 'home-page' %}"> Home Page </a>
+        <a href="{% url 'list' %}"> Challenges List </a>
+    </div>
+    <div>
+    {% block content %}
+
+    {% endblock content %}
+    </div>
+</body>
+
+</html>

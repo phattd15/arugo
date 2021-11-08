@@ -1,18 +1,29 @@
+{% extends 'base/main.html' %}
+
+{% block content %}
 <div>
     <h1>
         Register site
     </h1>
-    <p>
-        Error: {{ error }}
-    </p>
+    <h2>
+        Error:
+    </h2>
+    {% for err in error%}
+        <p>
+            {{err}}
+        </p>
+    {% endfor %}
 </div>
 <div>
     <form method="POST">
         {% csrf_token %}
-        <input type="text" id="username" name="username"><br><br>
-        <input type="text" id="password" name="password"><br><br>
-        <input type="text" id="handle" name="handle"><br><br>
-        <input type="text" id="rating" name="rating"><br><br>
+        <label for="username">Username / Handle</label><br>
+        <input type="text" id="username" name="username"><br>
+        <label for="password">Password</label><br>
+        <input type="text" id="password" name="password"><br>
+        <label for="handle">Rating</label><br>
+        <input type="text" id="rating" name="rating" value="1400"><br><br>
         <input class="button" type="submit" value="SUBMIT">
     </form>
 </div>
+{% endblock content %}

@@ -1,5 +1,9 @@
+{% extends 'base/main.html' %}
+
+{% block content %}
 <div>
     {% for problem in challenges %}
         <p> {{ problem }}</p>
     {% endfor %}
 </div>
+{% endblock content %}

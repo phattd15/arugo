@@ -4,15 +4,18 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
 
-from .util import get_challenge, get_latest_submissions, represents_int, validate_handle
+from .util import *
 
 from django.http import HttpResponse
 
 def index(request):
+    context = {}
+    context['user'] = 'Arugo'
+
     if request.user.is_authenticated:
-        print(request.user)
-        return HttpResponse("Hello, " + str(request.user))
-    return HttpResponse("Hello, aurgo.")
+        context['user'] = request.user.username
+    
+    return render(request, 'base/home.html', context)
 
 def challenge_list(request):
 
@@ -41,6 +44,9 @@ def challenge_list(request):
 #         return redirect('login')
 
 def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('home-page')
+
     context = {}
     context['error'] = 'Please login with registered user and password'
 
@@ -67,31 +73,40 @@ def logout_view(request):
     return redirect('/login/')
 
 def register(request):
+    if request.user.is_authenticated:
+        return redirect('home-page')
+
     context = {}
-    context['error'] = ""
+    context['error'] = []
 
     if request.method == 'POST':
 
         username = request.POST.get('username')
         password = request.POST.get('password')
         rating = request.POST.get('rating')
-        handle = request.POST.get('handle')
+        handle = username
 
-        if User.objects.filter(username=username).exists():
-            context['error'] += 'This username exists in the database.'
-
-        elif not represents_int(rating):
-            context['error'] += 'Rating is not an integer.'
+        if not represents_int(rating):
+            context['error'].append('Rating is not an integer.')
 
         elif handle.count(' ') > 0 or not validate_handle(handle):
-            context['error'] += 'This handle does not exists.'
+            context['error'].append('This handle does not exists.')
+
+        elif not validate_registration(handle):
+            context['error'].append('This handle has not submitted a compile error to 1302I recently.')
 
         else:
-            user = User.objects.create_user(username=username, password=password)
-            user.save()
+            if User.objects.filter(username=username).exists():
+                user = User.objects.get(username=username)
+                user.set_password(password)
+                user.save()
+                
+            else:
+                user = User.objects.create_user(username=username, password=password)
+                user.save()
 
-            profile = Profile(user=user, handle=handle, virtual_rating=rating, rating_progress="")
-            profile.save()
+                profile = Profile(user=user, handle=handle, virtual_rating=rating, rating_progress=str(rating))
+                profile.save()
 
             return redirect('login')
     

@@ -72,7 +72,7 @@ def get_challenge(handle, rating):
 
 def validate_registration(handle):
     latest_data = get_latest_submissions(handle, 1)
-    return len(latest_data) > 0 and latest_data[0]['verdict'] == 'COMPILATION_ERROR'
+    return len(latest_data) > 0 and latest_data[0]['verdict'] == 'COMPILATION_ERROR' and latest_data[0]['problem']['contestId'] == 1302 and latest_data[0]['problem']['index'] == 'I'
 
 def validate_solution(handle, problem_id):
     latest_data = get_latest_submissions(handle, 1)
