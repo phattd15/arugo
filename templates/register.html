@@ -1,29 +1,33 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<div>
-    <h1>
-        Register site
+<div class="container">
+    <h1 class="display-1">
+        Register
     </h1>
-    <h2>
-        Error:
-    </h2>
     {% for err in error%}
-        <p>
+        <div class="alert alert-danger" role="alert">
             {{err}}
-        </p>
+        </div>
     {% endfor %}
 </div>
-<div>
+<div class="container">
     <form method="POST">
         {% csrf_token %}
-        <label for="username">Username / Handle</label><br>
-        <input type="text" id="username" name="username"><br>
-        <label for="password">Password</label><br>
-        <input type="text" id="password" name="password"><br>
-        <label for="handle">Rating</label><br>
-        <input type="text" id="rating" name="rating" value="1400"><br><br>
-        <input class="button" type="submit" value="SUBMIT">
-    </form>
+        <div class="form-group">
+          <label for="username">Username / Codeforces Handle </label>
+            <input type="username" class="form-control" id="username" name="username" placeholder="Example: tourist, ...">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" class="form-control" id="password" placeholder="Password" name="password">
+        </div>
+        <div class="form-group">
+            <label for="rating">Virtual rating</label>
+            <input type="text" class="form-control" id="rating" placeholder="Your expected rating" value="1400" name="rating">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
 </div>
+
 {% endblock content %}

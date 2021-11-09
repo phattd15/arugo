@@ -48,7 +48,7 @@ def login_view(request):
         return redirect("home-page")
 
     context = {}
-    context["error"] = "Please login with registered user and password"
+    context["error"] = []
 
     if request.method == "POST":
         username = request.POST.get("username")
@@ -62,7 +62,7 @@ def login_view(request):
             return response
 
         else:
-            context["error"] = "Failed to login."
+            context["error"].append("Failed to login.")
 
     return render(request, "login.html", context)
 
@@ -86,6 +86,8 @@ def register(request):
         rating = request.POST.get("rating")
         handle = username
 
+        print(username, password, handle)
+
         if not represents_int(rating):
             context["error"].append("Rating is not an integer.")
 
@@ -98,10 +100,15 @@ def register(request):
             )
 
         else:
+            rating = int(rating)
+
             if User.objects.filter(username=username).exists():
                 user = User.objects.get(username=username)
                 user.set_password(password)
                 user.save()
+
+                profile = Profile.objects.get(handle=handle)
+                apply_rating_change(profile, rating, True)
 
             else:
                 user = User.objects.create_user(username=username, password=password)

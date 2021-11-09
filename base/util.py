@@ -49,12 +49,13 @@ def represents_int(s):
 
 
 def validate_handle(handle):
-    URL = "https://codeforces.com/api/user.info?handles=" + handle
-
-    response = urlopen(URL)
-    response_data = json.loads(response.read())
-
-    return response_data["status"] == "OK"
+    try:
+        URL = "https://codeforces.com/api/user.info?handles=" + handle
+        response = urlopen(URL)
+        response_data = json.loads(response.read())
+        return response_data["status"] == "OK"
+    except:
+        return False
 
 
 def submission_to_problem(submission):
@@ -122,8 +123,12 @@ def parse_problem_id(problem_id):
 # def get_rating
 
 
-def apply_rating_change(profile, delta):
+def apply_rating_change(profile, delta, direct_apply=False):
     profile.virtual_rating += delta
+
+    if direct_apply:
+        profile.virtual_rating = delta
+
     whole_rating = eval(profile.rating_progress)
     whole_rating.append(profile.virtual_rating)
 

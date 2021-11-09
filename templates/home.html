@@ -1,5 +1,6 @@
 {% extends 'main.html' %}
     {% block content %}
+    <div class="container">
     {% if not user %}
         <h1>
             Welcome to arugo.
@@ -16,4 +17,5 @@
             Rating progress: {{user.rating_progress}}
         </p>
     {% endif %}
+    </div>
 {% endblock content %}
