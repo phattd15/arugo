@@ -3,6 +3,8 @@ import json
 from urllib.request import urlopen
 from .models import Problem
 from random import randint
+from datetime import datetime, timedelta
+from django.utils import timezone
 
 def read_data(url):
     response = urlopen(url)
@@ -77,6 +79,48 @@ def validate_registration(handle):
 def validate_solution(handle, problem_id):
     latest_data = get_latest_submissions(handle, 1)
     return latest_data[0]['verdict'] == 'OK' and str(latest_data[0]['problem']['contestId']) + latest_data[0]['problem']['index'] == problem_id
+
+def accept_challenge(profile, contest_id, index):
+    profile.in_progress = True
+    profile.current_problem = str(contest_id) + index
+    profile.deadline = timezone.now() + timedelta(hours=1, minutes=20)
+    profile.save()
+
+def parse_problem_id(problem_id):
+    for i in range(len(problem_id)):
+        if not problem_id[i].isdigit():
+            return (problem_id[:i], problem_id[i:])
+
+# def get_rating
+
+def apply_rating_change(profile, delta):
+    profile.virtual_rating += delta
+    whole_rating = eval(profile.rating_progress)
+    whole_rating.append(profile.virtual_rating)
+    
+    if (len(whole_rating) > 30):
+        whole_rating.pop(0)
+
+    profile.rating_progress = repr(whole_rating)
+    profile.in_progress = False
+    profile.save()
+
+def validate_challenge(profile):
+    if not profile.in_progress:
+        return False
+    
+    validate_result = validate_solution(profile.handle, profile.current_problem)
+
+    if timezone.now() > profile.deadline:
+        apply_rating_change(profile, 10 if validate_result else -10)
+        return True
+
+    elif validate_result:
+        apply_rating_change(profile, 10)
+        return True
+    
+    else:
+        return False
 
 # def calculate_gains(rating, pr, magnitude=10):
 #     chance = 1 / (1 + 10 ** ((pr - rating) / 100))

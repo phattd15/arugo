@@ -18,13 +18,13 @@ class Problem(models.Model):
 """
 Profile hereby inherits the django user.
 handle = codeforces handle
-rating_progress = python list stored as json string
+rating_progress = python list stored in string type through 'repr' method, later parse by eval
 """
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     handle = models.CharField(max_length=40)
     registration_date = models.DateField(auto_now_add=True)
-    rating_progress = models.CharField(max_length=200)
+    rating_progress = models.CharField(max_length=200, default='[]')
     virtual_rating = models.IntegerField(default=1400)
     in_progress = models.BooleanField(default=False)
     current_problem = models.CharField(max_length=20, default='Unselected')

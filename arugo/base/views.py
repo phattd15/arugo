@@ -18,30 +18,39 @@ def index(request):
     return render(request, 'base/home.html', context)
 
 def challenge_list(request):
-
-    if request.user.is_authenticated:
-        
-        user = request.user
-        profile = Profile.objects.get(user=user)
-
-        handle = profile.handle
-        rating = profile.virtual_rating
-
-        normalized_rating = rating - rating % 100
-        context = {}
-
-        context['challenges'] = get_challenge(handle, [normalized_rating + delta for delta in range(-100, 400, 100)])
-
-        return render(request, 'base/list.html', context)
-
-    else:
+    if not request.user.is_authenticated:
         return redirect('login')
 
-# def in_challenge(request);
-#     if request.user.is_authenticated:
-#         context = []
-#     else:
+    user = request.user
+    profile = Profile.objects.get(user=user)
+
+    # TODO: redirect to challenge site
+    if profile.in_progress:
+        redirect('home-page')
+
+    handle = profile.handle
+    rating = profile.virtual_rating
+
+    normalized_rating = rating - rating % 100
+    context = {}
+
+    context['challenges'] = get_challenge(handle, [normalized_rating + delta for delta in range(-100, 400, 100)])
+
+    return render(request, 'base/list.html', context)
+
+# def accept_challenge(request,  )
+
+# def challenge_site(request);
+#     if not request.user.is_authenticated:
 #         return redirect('login')
+
+#     if not request.user.in_progress:
+#         return redirect('list')
+
+#     context = {}
+
+#     context['dead']
+    
 
 def login_view(request):
     if request.user.is_authenticated:
@@ -105,7 +114,7 @@ def register(request):
                 user = User.objects.create_user(username=username, password=password)
                 user.save()
 
-                profile = Profile(user=user, handle=handle, virtual_rating=rating, rating_progress=str(rating))
+                profile = Profile(user=user, handle=handle, virtual_rating=rating, rating_progress='[' + str(rating) + ']')
                 profile.save()
 
             return redirect('login')
