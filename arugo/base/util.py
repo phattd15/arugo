@@ -6,50 +6,64 @@ from random import randint
 from datetime import datetime, timedelta
 from django.utils import timezone
 
+
 def read_data(url):
     response = urlopen(url)
-    response_data = json.loads(response.read())    
+    response_data = json.loads(response.read())
 
-    return response_data['result']
+    return response_data["result"]
+
 
 def fetch_problemset():
-    URL = 'https://codeforces.com/api/problemset.problems'
+    URL = "https://codeforces.com/api/problemset.problems"
 
     data = read_data(URL)
-    problemset = data['problems']
+    problemset = data["problems"]
 
     for problem in problemset:
-        if problem['type'] != 'PROGRAMMING' or not 'rating' in problem:
+        if problem["type"] != "PROGRAMMING" or not "rating" in problem:
             continue
-        p = Problem(contest_id=problem['contestId'], name=problem['name'], rating=problem['rating'], index=problem['index'])
+        p = Problem(
+            contest_id=problem["contestId"],
+            name=problem["name"],
+            rating=problem["rating"],
+            index=problem["index"],
+        )
         p.save()
+
 
 def get_latest_submissions(handle, cnt=500):
     cnt = min(cnt, 3000)
-    URL = 'https://codeforces.com/api/user.status?handle={}&from=1&cnt={}'.format(handle, cnt)
+    URL = "https://codeforces.com/api/user.status?handle={}&from=1&cnt={}".format(
+        handle, cnt
+    )
     return read_data(URL)
 
+
 def represents_int(s):
-    try: 
+    try:
         int(s)
         return True
     except ValueError:
         return False
 
+
 def validate_handle(handle):
-    URL = 'https://codeforces.com/api/user.info?handles=' + handle
+    URL = "https://codeforces.com/api/user.info?handles=" + handle
 
     response = urlopen(URL)
     response_data = json.loads(response.read())
 
-    return response_data['status'] == 'OK'
+    return response_data["status"] == "OK"
+
 
 def submission_to_problem(submission):
-    return str(submission['contestId']) + submission['problem']['index']
+    return str(submission["contestId"]) + submission["problem"]["index"]
+
 
 def get_challenge(handle, rating):
     latest_data = get_latest_submissions(handle, 2000)
-    latest_data = filter(lambda submission: submission['verdict'] == 'OK', latest_data)
+    latest_data = filter(lambda submission: submission["verdict"] == "OK", latest_data)
     problem_id_only = set(map(submission_to_problem, latest_data))
     res = []
 
@@ -66,19 +80,31 @@ def get_challenge(handle, rating):
             else:
                 rproblem = problem
                 break
-        
+
         res.append(rproblem)
-        
+
     return res
 
 
 def validate_registration(handle):
     latest_data = get_latest_submissions(handle, 1)
-    return len(latest_data) > 0 and latest_data[0]['verdict'] == 'COMPILATION_ERROR' and latest_data[0]['problem']['contestId'] == 1302 and latest_data[0]['problem']['index'] == 'I'
+    return (
+        len(latest_data) > 0
+        and latest_data[0]["verdict"] == "COMPILATION_ERROR"
+        and latest_data[0]["problem"]["contestId"] == 1302
+        and latest_data[0]["problem"]["index"] == "I"
+    )
+
 
 def validate_solution(handle, problem_id):
     latest_data = get_latest_submissions(handle, 1)
-    return latest_data[0]['verdict'] == 'OK' and str(latest_data[0]['problem']['contestId']) + latest_data[0]['problem']['index'] == problem_id
+    return (
+        latest_data[0]["verdict"] == "OK"
+        and str(latest_data[0]["problem"]["contestId"])
+        + latest_data[0]["problem"]["index"]
+        == problem_id
+    )
+
 
 def accept_challenge(profile, contest_id, index):
     profile.in_progress = True
@@ -86,29 +112,33 @@ def accept_challenge(profile, contest_id, index):
     profile.deadline = timezone.now() + timedelta(hours=1, minutes=20)
     profile.save()
 
+
 def parse_problem_id(problem_id):
     for i in range(len(problem_id)):
         if not problem_id[i].isdigit():
             return (problem_id[:i], problem_id[i:])
 
+
 # def get_rating
+
 
 def apply_rating_change(profile, delta):
     profile.virtual_rating += delta
     whole_rating = eval(profile.rating_progress)
     whole_rating.append(profile.virtual_rating)
-    
-    if (len(whole_rating) > 30):
+
+    if len(whole_rating) > 30:
         whole_rating.pop(0)
 
     profile.rating_progress = repr(whole_rating)
     profile.in_progress = False
     profile.save()
 
+
 def validate_challenge(profile):
     if not profile.in_progress:
         return False
-    
+
     validate_result = validate_solution(profile.handle, profile.current_problem)
 
     if timezone.now() > profile.deadline:
@@ -118,9 +148,10 @@ def validate_challenge(profile):
     elif validate_result:
         apply_rating_change(profile, 10)
         return True
-    
+
     else:
         return False
+
 
 # def calculate_gains(rating, pr, magnitude=10):
 #     chance = 1 / (1 + 10 ** ((pr - rating) / 100))

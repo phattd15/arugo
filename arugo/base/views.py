@@ -8,25 +8,27 @@ from .util import *
 
 from django.http import HttpResponse
 
+
 def index(request):
     context = {}
-    context['user'] = 'Arugo'
+    context["user"] = "Arugo"
 
     if request.user.is_authenticated:
-        context['user'] = request.user.username
-    
-    return render(request, 'base/home.html', context)
+        context["user"] = request.user.username
+
+    return render(request, "base/home.html", context)
+
 
 def challenge_list(request):
     if not request.user.is_authenticated:
-        return redirect('login')
+        return redirect("login")
 
     user = request.user
     profile = Profile.objects.get(user=user)
 
     # TODO: redirect to challenge site
     if profile.in_progress:
-        redirect('home-page')
+        redirect("home-page")
 
     handle = profile.handle
     rating = profile.virtual_rating
@@ -34,89 +36,120 @@ def challenge_list(request):
     normalized_rating = rating - rating % 100
     context = {}
 
-    context['challenges'] = get_challenge(handle, [normalized_rating + delta for delta in range(-100, 400, 100)])
+    context["challenges"] = get_challenge(
+        handle, [normalized_rating + delta for delta in range(-100, 400, 100)]
+    )
 
-    return render(request, 'base/list.html', context)
+    return render(request, "base/list.html", context)
 
-# def accept_challenge(request,  )
-
-# def challenge_site(request);
-#     if not request.user.is_authenticated:
-#         return redirect('login')
-
-#     if not request.user.in_progress:
-#         return redirect('list')
-
-#     context = {}
-
-#     context['dead']
-    
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('home-page')
+        return redirect("home-page")
 
     context = {}
-    context['error'] = 'Please login with registered user and password'
+    context["error"] = "Please login with registered user and password"
 
-    if request.method == 'POST':
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
 
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
-            response = redirect('home-page')
+            response = redirect("home-page")
             return response
 
         else:
-            context['error'] = 'Failed to login.'
-        
-    return render(request, 'base/login.html', context)
+            context["error"] = "Failed to login."
+
+    return render(request, "base/login.html", context)
+
 
 def logout_view(request):
     logout(request)
 
-    return redirect('/login/')
+    return redirect("/login/")
+
 
 def register(request):
     if request.user.is_authenticated:
-        return redirect('home-page')
+        return redirect("home-page")
 
     context = {}
-    context['error'] = []
+    context["error"] = []
 
-    if request.method == 'POST':
-
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        rating = request.POST.get('rating')
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        rating = request.POST.get("rating")
         handle = username
 
         if not represents_int(rating):
-            context['error'].append('Rating is not an integer.')
+            context["error"].append("Rating is not an integer.")
 
-        elif handle.count(' ') > 0 or not validate_handle(handle):
-            context['error'].append('This handle does not exists.')
+        elif handle.count(" ") > 0 or not validate_handle(handle):
+            context["error"].append("This handle does not exists.")
 
         elif not validate_registration(handle):
-            context['error'].append('This handle has not submitted a compile error to 1302I recently.')
+            context["error"].append(
+                "This handle has not submitted a compile error to 1302I recently."
+            )
 
         else:
             if User.objects.filter(username=username).exists():
                 user = User.objects.get(username=username)
                 user.set_password(password)
                 user.save()
-                
+
             else:
                 user = User.objects.create_user(username=username, password=password)
                 user.save()
 
-                profile = Profile(user=user, handle=handle, virtual_rating=rating, rating_progress='[' + str(rating) + ']')
+                profile = Profile(
+                    user=user,
+                    handle=handle,
+                    virtual_rating=rating,
+                    rating_progress="[" + str(rating) + "]",
+                )
                 profile.save()
 
-            return redirect('login')
-    
-    return render(request, 'base/register.html', context)
+            return redirect("login")
+
+    return render(request, "base/register.html", context)
+
+
+def challenge_site(request):
+    if not request.user.is_authenticated:
+        return redirect("home-page")
+
+    user = request.user
+    profile = Profile.objects.get(user=user)
+
+    if not profile.in_progress:
+        return redirect("list")
+
+    if validate_challenge(profile):
+        return redirect("list")
+
+    context = {}
+    context["problem"] = profile.current_problem
+    context["deadline"] = profile.deadline
+
+    return render(request, "base/challenge.html", context)
+
+
+def solving(request, contest_id, index):
+    if not request.user.is_authenticated:
+        return redirect("home-page")
+
+    user = request.user
+    profile = Profile.objects.get(user=user)
+
+    if profile.in_progress:
+        return redirect("challenge")
+
+    accept_challenge(profile, contest_id, index)
+
+    return redirect("challenge")
