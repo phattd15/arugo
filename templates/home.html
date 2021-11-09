@@ -1,0 +1,19 @@
+{% extends 'main.html' %}
+    {% block content %}
+    {% if not user %}
+        <h1>
+            Welcome to arugo.
+        </h1>
+    {% else %}
+        <h1>
+            Hello, {{user.handle}}!
+        </h1>
+        <p>
+            Your rating: {{user.virtual_rating}}.
+        </p>
+        <br>
+        <p>
+            Rating progress: {{user.rating_progress}}
+        </p>
+    {% endif %}
+{% endblock content %}

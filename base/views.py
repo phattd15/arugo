@@ -16,7 +16,7 @@ def index(request):
     if request.user.is_authenticated:
         context["user"] = Profile.objects.get(user=request.user)
 
-    return render(request, "base/home.html", context)
+    return render(request, "home.html", context)
 
 
 def challenge_list(request):
@@ -40,7 +40,7 @@ def challenge_list(request):
         handle, [normalized_rating + delta for delta in range(-100, 400, 100)]
     )
 
-    return render(request, "base/list.html", context)
+    return render(request, "list.html", context)
 
 
 def login_view(request):
@@ -64,7 +64,7 @@ def login_view(request):
         else:
             context["error"] = "Failed to login."
 
-    return render(request, "base/login.html", context)
+    return render(request, "login.html", context)
 
 
 def logout_view(request):
@@ -117,7 +117,7 @@ def register(request):
 
             return redirect("login")
 
-    return render(request, "base/register.html", context)
+    return render(request, "register.html", context)
 
 
 def challenge_site(request):
@@ -139,7 +139,7 @@ def challenge_site(request):
     context["problem"] = problem
     context["time_remaining"] = (profile.deadline - timezone.now()).total_seconds()
 
-    return render(request, "base/challenge.html", context)
+    return render(request, "challenge.html", context)
 
 
 def solving(request, contest_id, index):

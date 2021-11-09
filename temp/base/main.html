@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Arugo</title>
+</head>
+
+<body>
+    <div>
+        <a class="btn btn-primary" href="{% url 'login' %}"> Login </a>
+        <a class="btn btn-primary" href="{% url 'logout' %}"> Logout </a>
+        <a class="btn btn-primary" href="{% url 'register' %}"> Register </a>
+        <a class="btn btn-primary" href="{% url 'home-page' %}"> Home Page </a>
+        <a class="btn btn-primary" href="{% url 'list' %}"> List </a>
+        <a class="btn btn-primary" href="{% url 'challenge' %}"> Challenge </a>
+    </div>
+    <br>
+    <br>
+    <div>
+    {% block content %}
+
+    {% endblock content %}
+    </div>
+</body>
+
+</html>

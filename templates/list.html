@@ -1,0 +1,12 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div>
+    {% for problem in challenges %}
+        <p> {{ problem }} </p>
+        <a href="https://codeforces.com/contest/{{problem.contest_id}}/problem/{{problem.index}}" target="_blank"> Link </a>
+        <br>
+        <a href="{% url 'solve' problem.contest_id problem.index %}"> Pick this challenge </a>
+    {% endfor %}
+</div>
+{% endblock content %}
