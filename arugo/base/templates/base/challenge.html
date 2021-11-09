@@ -2,11 +2,11 @@
 
 {% block content %}
 <div>
-    <p>
+    <a href="https://codeforces.com/contest/{{problem.contest_id}}/problem/{{problem.index}}" target="_blank">
         {{problem}}
-    </p>
+    </a>
     <p>
-        {{deadline}}
+        Total seconds left for the challenge: {{time_remaining}}.
     </p>
 </div>
 {% endblock content %}

@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .models import Profile
+from .models import Profile, Problem
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
@@ -11,10 +11,10 @@ from django.http import HttpResponse
 
 def index(request):
     context = {}
-    context["user"] = "Arugo"
+    context["user"] = None
 
     if request.user.is_authenticated:
-        context["user"] = request.user.username
+        context["user"] = Profile.objects.get(user=request.user)
 
     return render(request, "base/home.html", context)
 
@@ -133,9 +133,11 @@ def challenge_site(request):
     if validate_challenge(profile):
         return redirect("list")
 
+    contest_id, index = parse_problem_id(profile.current_problem)
+    problem = Problem.objects.get(contest_id=contest_id, index=index)
     context = {}
-    context["problem"] = profile.current_problem
-    context["deadline"] = profile.deadline
+    context["problem"] = problem
+    context["time_remaining"] = (profile.deadline - timezone.now()).total_seconds()
 
     return render(request, "base/challenge.html", context)
 
@@ -153,3 +155,17 @@ def solving(request, contest_id, index):
     accept_challenge(profile, contest_id, index)
 
     return redirect("challenge")
+
+
+def giveup(request):
+    if not request.user.is_authenticated:
+        return redirect("home-page")
+
+    user = request.user
+    profile = Profile.objects.get(user=user)
+
+    # TODO: Make a give up function in util
+    if profile.in_progress:
+        print("loser")
+
+    return redirect("list")

@@ -153,7 +153,7 @@ def validate_challenge(profile):
         return False
 
 
-# def calculate_gains(rating, pr, magnitude=10):
+# def rating_gain(user_rating, problem_rating, magnitude=10):
 #     chance = 1 / (1 + 10 ** ((pr - rating) / 100))
 #     sum = magnitude * 5
 
