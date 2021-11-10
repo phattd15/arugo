@@ -253,12 +253,22 @@ def make_graph(y):
     plt.xlim(0, len(y) - 1)
 
     cp = [0, 1200, 1400, 1600, 1900, 2100, 2300, 2400, 2600, 3000, 4000]
-
+    cl = [
+        "#858585",
+        "#7bc76d",
+        "#6fc7c1",
+        "#6e78c4",
+        "#ad6eb8",
+        "#d1ce75",
+        "#edab5a",
+        "#ed5555",
+        "#f50505",
+        "#960000",
+    ]
     for i in range(10):
-        cl, bcl = rating_color(cp[i])
-        plt.axhspan(cp[i], cp[i + 1], color=bcl)
+        plt.axhspan(cp[i], cp[i + 1], color=cl[i])
 
-    plt.plot(x, y)
+    plt.plot(x, y, color="#ffffff")
     imgdata = StringIO()
     fig.savefig(imgdata, format="svg")
     # imgdata.seek(0)
