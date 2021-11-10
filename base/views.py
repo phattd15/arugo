@@ -20,6 +20,7 @@ def index(request):
 
         context["user"] = profile
         context["graph"] = make_graph(eval(profile.rating_progress))
+        context["xcolor"] = color_rating_2(profile.virtual_rating)
 
     return render(request, "home.html", context)
 

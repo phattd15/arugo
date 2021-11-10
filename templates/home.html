@@ -28,7 +28,7 @@
 
     {% else %}
     <div class="container">
-        <h1 class="display-2">Hello, {{user.handle}}! </h1>
+        <h1 class="display-2">Hello, <span style="color:{{xcolor}}">{{user.handle}}</span>!</h1>
     </div>
     <div class="container">
         <form method="POST">
@@ -42,7 +42,7 @@
         </form>
     </div>
     <div class="container">
-        <p> Your rating: {{user.virtual_rating}}. </p>
+        <p> Your rating: <span style="color:{{xcolor}}">{{user.virtual_rating}}</span></p>
         <a class="btn btn-warning" href="{% url 'reset-progress' %}">Reset progress</a>
         <br>
         <p>Rating progress: {{user.rating_progress}} </p>

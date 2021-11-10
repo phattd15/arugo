@@ -241,6 +241,26 @@ def rating_loss(user_rating, problem_rating, magnitude=10):
     return max(-int(math.floor(magnitude * (0.5 / chance))), magnitude * -10)
 
 
+def color_rating_2(rating):
+    cp = [0, 1200, 1400, 1600, 1900, 2100, 2300, 2400, 2600, 3000, 4000]
+    cl = [
+        "#858585",
+        "#7bc76d",
+        "#6fc7c1",
+        "#6e78c4",
+        "#ad6eb8",
+        "#d1ce75",
+        "#edab5a",
+        "#ed5555",
+        "#f50505",
+        "#960000",
+    ]
+
+    for i in range(10):
+        if rating < cp[i + 1]:
+            return cl[i]
+
+
 def make_graph(y):
     fig = plt.figure()
     fig.set_size_inches(12.5, 5.5)
