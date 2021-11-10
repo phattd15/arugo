@@ -149,7 +149,9 @@ def challenge_site(request):
     context["time_remaining"] = (profile.deadline - timezone.now()).total_seconds()
     context["color"] = color
     context["bg_color"] = bg_color
-
+    context["gain"] = rating_gain(profile.virtual_rating, problem.rating)
+    context["loss"] = rating_loss(profile.virtual_rating, problem.rating)
+    
     return render(request, "challenge.html", context)
 
 

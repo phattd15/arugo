@@ -17,6 +17,9 @@
             <p>
                 Total seconds left for the challenge: {{time_remaining}}.
             </p>
+            <p>
+                Rating delta: <span class="text-success">{{gain}}</span> | <span class="text-danger">{{loss}}</span>
+            </p>
         </div>
         <div class="container">
             <a class="btn btn-warning" href="{% url 'giveup' %}">
