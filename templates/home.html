@@ -3,34 +3,48 @@
 <div class="container">
     {% if not user %}
     <h1 class="display-1">
-        Welcome to arugo.
+        Welcome to arugo
     </h1>
     <div class="container">
-        <p class="h4"> What is this site ? </p>
-        <p> This site helps users that want to do practice and can keep track of their progress through virtual rating
-            system. You can assign yourself with initial rating, do practice based on random suggested problem and earn
-            virtual rating through it. This site is inspired by my past training day, which I always wanted to have
-            something like this to aid my training. <a class="link-secondary" href="{% url 'help' %}" target="_blank">
-                Read more ...</a></p>
+        <p class="h4">What is this site?</p>
+        <p>This site helps users that want to do practice and can keep track of their progress through a virtual rating
+            system. You can assign yourself with an initial rating, do practice based on random suggested problems and
+            earn a virtual rating through it. This site is inspired by my past training days, which I always wanted to
+            have something like this to aid my training. <a class="link-secondary" href="{% url 'help' %}"
+                target="_blank">Read more...</a></p>
     </div>
     <div class="container">
-        <p class="h4">Already have an account ? </p>
+        <p class="h4">Already have an account?</p>
         <p>Login <a class="link-secondary" href="{% url 'help' %}" target="_blank">
                 here</a>.</p>
     </div>
     <div class="container">
-        <p class="h4">New to this site ?</p>
+        <p class="h4">New to this site?</p>
         <p>Register with your Codeforces handle <a class="link-secondary" href="{% url 'register' %}" target="_blank">
                 here</a>.</p>
     </div>
 
     {% else %}
-    <h1 class="display-2">Hello, {{user.handle}}! </h1>
-    <p>Your rating: {{user.virtual_rating}}. </p>
-    <a class="btn btn-warning" href="{% url 'reset-progress' %}">Reset progress</a>
-    <br>
-    <p>Rating progress: {{user.rating_progress}} </p>
-
+    <div class="container">
+        <h1 class="display-2">Hello, {{user.handle}}! </h1>
+    </div>
+    <div class="container">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="progress">Custom rating progress</label>
+                <input type="progress" class="form-control" id="progress" name="progress"
+                    placeholder="Enter rating with space">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+    <div class="container">
+        <p> Your rating: {{user.virtual_rating}}. </p>
+        <a class="btn btn-warning" href="{% url 'reset-progress' %}">Reset progress</a>
+        <br>
+        <p>Rating progress: {{user.rating_progress}} </p>
+    </div>
     <p> {{graph|safe}} </p>
 
     {% endif %}

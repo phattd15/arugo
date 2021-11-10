@@ -264,3 +264,28 @@ def give_up_problem(profile):
     delta = rating_loss(profile.virtual_rating, problem.rating)
 
     apply_rating_change(profile, delta)
+
+def can_be_parsed(s):
+    try:
+        progress = list(s.split())
+
+        for rating in progress:
+            if not represents_int(rating):
+                return False
+
+        return True
+
+    except ValueError:
+        return False
+
+def update_progress(profile, s):
+    if not can_be_parsed(s):
+        return
+    
+    progress = list(map(int, s.split()))
+    
+    while len(progress) > 30:
+        progress.pop
+
+    profile.rating_progress = repr(progress)
+    profile.save()

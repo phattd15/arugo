@@ -14,6 +14,10 @@ def index(request):
 
     if request.user.is_authenticated:
         profile = Profile.objects.get(user=request.user)
+
+        if request.method == "POST":
+            update_progress(profile, request.POST.get("progress"))
+        
         context["user"] = profile
         context["graph"] = make_graph(eval(profile.rating_progress))
 
@@ -41,7 +45,6 @@ def challenge_list(request):
     )
 
     return render(request, "list.html", context)
-
 
 def login_view(request):
     if request.user.is_authenticated:
