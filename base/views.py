@@ -17,7 +17,7 @@ def index(request):
 
         if request.method == "POST":
             update_progress(profile, request.POST.get("progress"))
-        
+
         context["user"] = profile
         context["graph"] = make_graph(eval(profile.rating_progress))
 
@@ -34,6 +34,14 @@ def challenge_list(request):
     if profile.in_progress:
         return redirect("challenge")
 
+    if request.method == "POST":
+        contest_id = request.POST.get("contest_id")
+        index = request.POST.get("index")
+
+        if represents_int(contest_id):
+            accept_challenge(profile, int(contest_id), index)
+            return redirect("challenge")
+
     handle = profile.handle
     rating = profile.virtual_rating
 
@@ -41,10 +49,13 @@ def challenge_list(request):
     context = {}
 
     context["challenges"] = get_challenge(
-        handle, profile.virtual_rating, [normalized_rating + delta for delta in range(-200, 500, 100)]
+        handle,
+        profile.virtual_rating,
+        [normalized_rating + delta for delta in range(-200, 500, 100)],
     )
 
     return render(request, "list.html", context)
+
 
 def login_view(request):
     if request.user.is_authenticated:
@@ -184,6 +195,7 @@ def giveup(request):
 
     return redirect("list")
 
+
 def reset_progress(request):
     if not request.user.is_authenticated:
         return redirect("home-page")
@@ -193,6 +205,7 @@ def reset_progress(request):
 
     reset_rating_progress(profile)
     return redirect("home-page")
+
 
 def help(request):
     return render(request, "help.html")

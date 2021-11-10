@@ -10,6 +10,7 @@ from io import StringIO
 import numpy as np
 import math
 
+
 def read_data(url):
     response = urlopen(url)
     response_data = json.loads(response.read())
@@ -105,6 +106,10 @@ def get_challenge(handle, user_rating, rating):
 
     for rt in rating:
         problemset = Problem.objects.filter(rating=rt)
+
+        if len(problemset) == 0:
+            continue
+
         rproblem = None
 
         for iteration in range(20):
@@ -116,13 +121,21 @@ def get_challenge(handle, user_rating, rating):
             else:
                 rproblem = problem
                 break
-        
+
         if rproblem is None:
             continue
 
         color, bg_color = rating_color(rproblem.rating)
 
-        res.append((rproblem, color, bg_color, rating_gain(user_rating, rt), rating_loss(user_rating, rt)))
+        res.append(
+            (
+                rproblem,
+                color,
+                bg_color,
+                rating_gain(user_rating, rt),
+                rating_loss(user_rating, rt),
+            )
+        )
 
     return res
 
@@ -148,8 +161,13 @@ def validate_solution(handle, problem_id):
 
 
 def accept_challenge(profile, contest_id, index):
+    contest = Problem.objects.filter(contest_id=contest_id, index=index)
+
+    if len(contest) == 0:
+        return
+
     profile.in_progress = True
-    profile.current_problem = str(contest_id) + index
+    profile.current_problem = str(contest[0].contest_id) + contest[0].index
     profile.deadline = timezone.now() + timedelta(hours=1, minutes=20)
     profile.save()
 
@@ -191,7 +209,7 @@ def validate_challenge(profile):
 
     problem = Problem.objects.get(contest_id=contest_id, index=index)
 
-    if timezone.now() > profile.deadline:        
+    if timezone.now() > profile.deadline:
         delta = 0
 
         if validate_result:
@@ -220,7 +238,7 @@ def rating_gain(user_rating, problem_rating, magnitude=10):
 def rating_loss(user_rating, problem_rating, magnitude=10):
     chance = 1 / (1 + 10 ** ((problem_rating - user_rating) / 500))
     chance = 1 - chance
-    return max(- int(math.floor(magnitude * (0.5 / chance))), magnitude * -10)
+    return max(-int(math.floor(magnitude * (0.5 / chance))), magnitude * -10)
 
 
 def make_graph(y):
@@ -234,7 +252,7 @@ def make_graph(y):
     plt.ylim(min_y, max_y)
     plt.xlim(0, len(y) - 1)
 
-    cp = [0, 1200, 1400, 1600, 1900, 2100, 2300, 2400, 2600, 3000, 3600]
+    cp = [0, 1200, 1400, 1600, 1900, 2100, 2300, 2400, 2600, 3000, 4000]
 
     for i in range(10):
         cl, bcl = rating_color(cp[i])
@@ -256,6 +274,7 @@ def reset_rating_progress(profile):
     profile.rating_progress = repr(progress)
     profile.save()
 
+
 def give_up_problem(profile):
     contest_id, index = parse_problem_id(profile.current_problem)
     contest_id = int(contest_id)
@@ -264,6 +283,7 @@ def give_up_problem(profile):
     delta = rating_loss(profile.virtual_rating, problem.rating)
 
     apply_rating_change(profile, delta)
+
 
 def can_be_parsed(s):
     try:
@@ -278,14 +298,16 @@ def can_be_parsed(s):
     except ValueError:
         return False
 
+
 def update_progress(profile, s):
     if not can_be_parsed(s):
         return
-    
+
     progress = list(map(int, s.split()))
-    
+
     while len(progress) > 30:
-        progress.pop
+        progress.pop()
 
     profile.rating_progress = repr(progress)
+    profile.virtual_rating = progress[-1]
     profile.save()

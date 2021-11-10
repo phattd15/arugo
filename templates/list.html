@@ -7,6 +7,24 @@
     </h1>
 </div>
 <div class="container">
+    <h3>Custom challenge</h3>
+    <div class="container">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="contest_id">Contest ID</label>
+                <input type="contest_id" class="form-control" id="contest_id" name="contest_id"
+                    placeholder="e.g: '1425'">
+            </div>
+            <div class="form-group">
+                <label for="index">Problem Index</label>
+                <input type="index" class="form-control" id="index" name="index" placeholder="e.g: 'A'">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+<div class="container">
     {% for problem, color, bg_color, gain, loss in challenges %}
     <div class="alert" style="border-width: 2px; border-color: {{color}}; background-color: {{bg_color}};">
         <a class="btn btn-success btn-lg left-text"
