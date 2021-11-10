@@ -33,19 +33,16 @@
     <div class="container">
         <form method="POST">
             {% csrf_token %}
-            <div class="form-group">
-                <label for="progress">Custom rating progress</label>
+            <div class="input-group mb-3">
                 <input type="progress" class="form-control" id="progress" name="progress"
-                    placeholder="Enter rating with space. e.g: '1200 1250 1340 1450'.">
+                    placeholder="Custom rating progress here. Enter rating with space. e.g: '1200 1250 1340 1450'.">
+                    <button type="submit" class="btn btn-primary">Submit</button>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
     <div class="container">
-        <p> Your rating: <span style="color:{{xcolor}}">{{user.virtual_rating}}</span></p>
-        <a class="btn btn-warning" href="{% url 'reset-progress' %}">Reset progress</a>
-        <br>
-        <p>Rating progress: {{user.rating_progress}} </p>
+        <p> Your rating: <span style="color:{{xcolor}}">{{user.virtual_rating}}</span>. <a class="btn btn-warning" href="{% url 'reset-progress' %}">Reset progress</a></p>
+        <!-- <p>Rating progress: {{user.rating_progress}} </p> -->
     </div>
     <p> {{graph|safe}} </p>
 

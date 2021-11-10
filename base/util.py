@@ -261,7 +261,7 @@ def color_rating_2(rating):
             return cl[i]
 
 
-def make_graph(y):
+def make_graph(handle, y):
     fig = plt.figure()
     fig.set_size_inches(12.5, 5.5)
     x = range(len(y))
@@ -288,6 +288,7 @@ def make_graph(y):
     for i in range(10):
         plt.axhspan(cp[i], cp[i + 1], color=cl[i])
 
+    plt.title(handle + "'s rating progress chart")
     plt.plot(x, y, color="#ffffff")
     imgdata = StringIO()
     fig.savefig(imgdata, format="svg")
