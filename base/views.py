@@ -151,7 +151,7 @@ def challenge_site(request):
     context["bg_color"] = bg_color
     context["gain"] = rating_gain(profile.virtual_rating, problem.rating)
     context["loss"] = rating_loss(profile.virtual_rating, problem.rating)
-    
+
     return render(request, "challenge.html", context)
 
 
@@ -192,3 +192,6 @@ def reset_progress(request):
 
     reset_rating_progress(profile)
     return redirect("home-page")
+
+def help(request):
+    return render(request, "help.html")
