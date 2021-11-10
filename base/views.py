@@ -27,8 +27,6 @@ def challenge_list(request):
     user = request.user
     profile = Profile.objects.get(user=user)
 
-    print(user, profile.in_progress, profile.current_problem)
-
     if profile.in_progress:
         return redirect("challenge")
 

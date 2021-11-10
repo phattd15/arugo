@@ -231,7 +231,6 @@ def make_graph(y):
     max_y = max_y + 100 - max_y % 100
     min_y = min(y)
     min_y = min_y - 50 - min_y % 100
-    print(max_y)
     plt.ylim(min_y, max_y)
     plt.xlim(0, len(y) - 1)
 
