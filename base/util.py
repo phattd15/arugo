@@ -8,7 +8,7 @@ from django.utils import timezone
 import matplotlib.pyplot as plt
 from io import StringIO
 import numpy as np
-
+import math
 
 def read_data(url):
     response = urlopen(url)
@@ -116,6 +116,9 @@ def get_challenge(handle, rating):
             else:
                 rproblem = problem
                 break
+        
+        if rproblem is None:
+            continue
 
         color, bg_color = rating_color(rproblem.rating)
 
@@ -183,23 +186,41 @@ def validate_challenge(profile):
 
     validate_result = validate_solution(profile.handle, profile.current_problem)
 
-    if timezone.now() > profile.deadline:
-        apply_rating_change(profile, 10 if validate_result else -10)
+    contest_id, index = parse_problem_id(profile.current_problem)
+    contest_id = int(contest_id)
+
+    problem = Problem.objects.get(contest_id=contest_id, index=index)
+
+    if timezone.now() > profile.deadline:        
+        delta = 0
+
+        if validate_result:
+            delta = rating_gain(profile.virtual_rating, problem.rating)
+
+        else:
+            delta = rating_loss(profile.virtual_rating, problem.rating)
+
+        apply_rating_change(profile, delta)
         return True
 
     elif validate_result:
-        apply_rating_change(profile, 10)
+        delta = rating_gain(profile.virtual_rating, problem.rating)
+        apply_rating_change(profile, delta)
         return True
 
     else:
         return False
 
 
-# def rating_gain(user_rating, problem_rating, magnitude=10):
-#     chance = 1 / (1 + 10 ** ((pr - rating) / 100))
-#     sum = magnitude * 5
+def rating_gain(user_rating, problem_rating, magnitude=10):
+    chance = 1 / (1 + 10 ** ((problem_rating - user_rating) / 500))
+    return min(magnitude * 10, int(math.floor(magnitude * (0.5 / chance))))
 
-#     return []
+
+def rating_loss(user_rating, problem_rating, magnitude=10):
+    chance = 1 / (1 + 10 ** ((problem_rating - user_rating) / 500))
+    chance = 1 - chance
+    return max(- int(math.floor(magnitude * (0.5 / chance))), magnitude * -10)
 
 
 def make_graph(y):
@@ -229,9 +250,18 @@ def make_graph(y):
     return data
 
 
-def reset_progress(profile):
+def reset_rating_progress(profile):
     progress = eval(profile.rating_progress)
-    progress = progress[-1]
+    progress = [progress[-1]]
 
     profile.rating_progress = repr(progress)
     profile.save()
+
+def give_up_problem(profile):
+    contest_id, index = parse_problem_id(profile.current_problem)
+    contest_id = int(contest_id)
+
+    problem = Problem.objects.get(contest_id=contest_id, index=index)
+    delta = rating_loss(profile.virtual_rating, problem.rating)
+
+    apply_rating_change(profile, delta)

@@ -39,7 +39,7 @@ def challenge_list(request):
     context = {}
 
     context["challenges"] = get_challenge(
-        handle, [normalized_rating + delta for delta in range(-100, 400, 100)]
+        handle, [normalized_rating + delta for delta in range(-200, 500, 100)]
     )
 
     return render(request, "list.html", context)
@@ -177,6 +177,16 @@ def giveup(request):
 
     # TODO: Make a give up function in util
     if profile.in_progress:
-        print("loser")
+        give_up_problem(profile)
 
     return redirect("list")
+
+def reset_progress(request):
+    if not request.user.is_authenticated:
+        return redirect("home-page")
+
+    user = request.user
+    profile = Profile.objects.get(user=user)
+
+    reset_rating_progress(profile)
+    return redirect("home-page")

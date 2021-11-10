@@ -9,12 +9,19 @@
 <div class="container">
     <div class="alert" style="border-width: 2px; border-color: {{color}}; background-color: {{bg_color}}">
         <div class="container">
-        <a class="btn btn-success btn-lg left-text" href="https://codeforces.com/contest/{{problem.contest_id}}/problem/{{problem.index}}" target="_blank"> {{ problem }} </a>
+            <a class="btn btn-success btn-lg left-text"
+                href="https://codeforces.com/contest/{{problem.contest_id}}/problem/{{problem.index}}" target="_blank">
+                {{ problem }} </a>
         </div>
         <div class="container">
             <p>
                 Total seconds left for the challenge: {{time_remaining}}.
             </p>
+        </div>
+        <div class="container">
+            <a class="btn btn-warning" href="{% url 'giveup' %}">
+                Give up :(
+            </a>
         </div>
     </div>
 </div>

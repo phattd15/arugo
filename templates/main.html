@@ -2,6 +2,7 @@
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Arugo</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
@@ -13,41 +14,42 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample08" aria-controls="navbarsExample08" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample08"
+            aria-controls="navbarsExample08" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
         </button>
-  
+
         <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExample08">
-          <ul class="navbar-nav">
-            <li class="nav-item active">
-              <a class="nav-link" href="#"> ARUGO </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-item nav-link" href="{% url 'login' %}"> Login </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-item nav-link" href="{% url 'logout' %}"> Logout </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-item nav-link" href="{% url 'register' %}"> Register </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-item nav-link" href="{% url 'home-page' %}"> Home Page </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-item nav-link" href="{% url 'list' %}"> List </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-item nav-link" href="{% url 'challenge' %}"> Challenge </a>
-            </li>
-          </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#"> ARUGO </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-item nav-link" href="{% url 'login' %}"> Login </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-item nav-link" href="{% url 'logout' %}"> Logout </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-item nav-link" href="{% url 'register' %}"> Register </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-item nav-link" href="{% url 'home-page' %}"> Home Page </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-item nav-link" href="{% url 'list' %}"> List </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-item nav-link" href="{% url 'challenge' %}"> Challenge </a>
+                </li>
+            </ul>
         </div>
-      </nav>
+    </nav>
     <br>
     <br>
     <div class="container">
-    {% block content %}
-    {% endblock content %}
+        {% block content %}
+        {% endblock content %}
     </div>
 </body>
 

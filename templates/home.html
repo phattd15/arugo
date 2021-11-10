@@ -1,24 +1,25 @@
 {% extends 'main.html' %}
-    {% block content %}
-    <div class="container">
+{% block content %}
+<div class="container">
     {% if not user %}
-        <h1>
-            Welcome to arugo.
-        </h1>
+    <h1>
+        Welcome to arugo.
+    </h1>
     {% else %}
-        <h1>
-            Hello, {{user.handle}}!
-        </h1>
-        <p>
-            Your rating: {{user.virtual_rating}}.
-        </p>
-        <br>
-        <p>
-            Rating progress: {{user.rating_progress}}
-        </p>
-        
-        <p> {{graph|safe}} </p>
+    <h1>
+        Hello, {{user.handle}}!
+    </h1>
+    <p>
+        Your rating: {{user.virtual_rating}}.
+    </p>
+    <a class="btn btn-warning" href="{% url 'reset-progress' %}"> Reset progress.</a>
+    <br>
+    <p>
+        Rating progress: {{user.rating_progress}}
+    </p>
+
+    <p> {{graph|safe}} </p>
 
     {% endif %}
-    </div>
+</div>
 {% endblock content %}
