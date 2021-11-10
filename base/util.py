@@ -308,6 +308,13 @@ def update_progress(profile, s):
     while len(progress) > 30:
         progress.pop()
 
+    for i in range(len(progress)):
+        if progress[i] > 4000:
+            progress[i] = 4000
+
+        if progress[i] < 0:
+            progress[i] = 0
+
     profile.rating_progress = repr(progress)
     profile.virtual_rating = progress[-1]
     profile.save()
