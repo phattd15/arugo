@@ -6,8 +6,6 @@ from django.shortcuts import redirect
 
 from .util import *
 
-from django.http import HttpResponse
-
 
 def index(request):
     context = {}
@@ -26,9 +24,10 @@ def challenge_list(request):
     user = request.user
     profile = Profile.objects.get(user=user)
 
-    # TODO: redirect to challenge site
+    print(user, profile.in_progress, profile.current_problem)
+
     if profile.in_progress:
-        redirect("home-page")
+        return redirect("challenge")
 
     handle = profile.handle
     rating = profile.virtual_rating
@@ -142,9 +141,13 @@ def challenge_site(request):
 
     contest_id, index = parse_problem_id(profile.current_problem)
     problem = Problem.objects.get(contest_id=contest_id, index=index)
+    color, bg_color = rating_color(problem.rating)
+
     context = {}
     context["problem"] = problem
     context["time_remaining"] = (profile.deadline - timezone.now()).total_seconds()
+    context["color"] = color
+    context["bg_color"] = bg_color
 
     return render(request, "challenge.html", context)
 

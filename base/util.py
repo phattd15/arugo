@@ -62,6 +62,38 @@ def submission_to_problem(submission):
     return str(submission["contestId"]) + submission["problem"]["index"]
 
 
+def rating_color(rating):
+    if rating < 1200:
+        return ("gray", "#ebedf0")
+
+    elif rating < 1400:
+        return ("green", "#e9f5ea")
+
+    elif rating < 1600:
+        return ("cyan", "#e6f7f6")
+
+    elif rating < 1900:
+        return ("#0700c4", "#e8ecfa")
+
+    elif rating < 2100:
+        return ("#a100c2", "#eee1f7")
+
+    elif rating < 2300:
+        return ("#ffea00", "#ffffeb")
+
+    elif rating < 2400:
+        return ("#ed8b00", "#f7eddf")
+
+    elif rating < 2600:
+        return ("#fc5b00", "#ffe8db")
+
+    elif rating < 3000:
+        return ("#ff1500", "#fcb7b1")
+
+    else:
+        return ("#5e010f", "#deb8be")
+
+
 def get_challenge(handle, rating):
     latest_data = get_latest_submissions(handle, 2000)
     latest_data = filter(lambda submission: submission["verdict"] == "OK", latest_data)
@@ -82,7 +114,9 @@ def get_challenge(handle, rating):
                 rproblem = problem
                 break
 
-        res.append(rproblem)
+        color, bg_color = rating_color(rproblem.rating)
+
+        res.append((rproblem, color, bg_color))
 
     return res
 

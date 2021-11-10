@@ -3,13 +3,17 @@ body {
 }
 
 .navbar {
-  margin-bottom: 20px;
+  margin-bottom: 5px;
 }
 
 .container {
-  margin: 20px;
+  margin: 15px;
 }
 
 .form-group {
   margin-bottom: 20px;
+}
+
+.alert {
+  margin: 20px;
 }
