@@ -5,14 +5,31 @@
     <h1 class="display-1">
         Welcome to arugo.
     </h1>
+    <div class="container">
+        <p class="h4"> What is this site ? </p>
+        <p> This site helps users that want to do practice and can keep track of their progress through virtual rating
+            system. You can assign yourself with initial rating, do practice based on random suggested problem and earn
+            virtual rating through it. This site is inspired by my past training day, which I always wanted to have
+            something like this to aid my training. <a class="link-secondary" href="{% url 'help' %}" target="_blank">
+                Read more ...</a></p>
+    </div>
+    <div class="container">
+        <p class="h4">Already have an account ? </p>
+        <p>Login <a class="link-secondary" href="{% url 'help' %}" target="_blank">
+                here</a>.</p>
+    </div>
+    <div class="container">
+        <p class="h4">New to this site ?</p>
+        <p>Register with your Codeforces handle <a class="link-secondary" href="{% url 'help' %}" target="_blank">
+                here</a>.</p>
+    </div>
+
     {% else %}
-    <h1 class="display-2">
-        Hello, {{user.handle}}!
-    </h1>
-    <p> Your rating: {{user.virtual_rating}}. </p>
-    <a class="btn btn-warning" href="{% url 'reset-progress' %}"> Reset progress.</a>
+    <h1 class="display-2">Hello, {{user.handle}}! </h1>
+    <p>Your rating: {{user.virtual_rating}}. </p>
+    <a class="btn btn-warning" href="{% url 'reset-progress' %}">Reset progress</a>
     <br>
-    <p> Rating progress: {{user.rating_progress}} </p>
+    <p>Rating progress: {{user.rating_progress}} </p>
 
     <p> {{graph|safe}} </p>
 
