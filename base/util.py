@@ -97,7 +97,7 @@ def rating_color(rating):
         return ("#5e010f", "#deb8be")
 
 
-def get_challenge(handle, rating):
+def get_challenge(handle, user_rating, rating):
     latest_data = get_latest_submissions(handle, 2000)
     latest_data = filter(lambda submission: submission["verdict"] == "OK", latest_data)
     problem_id_only = set(map(submission_to_problem, latest_data))
@@ -122,7 +122,7 @@ def get_challenge(handle, rating):
 
         color, bg_color = rating_color(rproblem.rating)
 
-        res.append((rproblem, color, bg_color))
+        res.append((rproblem, color, bg_color, rating_gain(user_rating, rt), rating_loss(user_rating, rt)))
 
     return res
 
@@ -228,9 +228,9 @@ def make_graph(y):
     fig.set_size_inches(12.5, 5.5)
     x = range(len(y))
     max_y = max(y)
-    max_y = max_y + 200 - max_y % 100
+    max_y = max_y + 100 - max_y % 100
     min_y = min(y)
-    min_y = min_y - 100 - min_y % 100
+    min_y = min_y - 50 - min_y % 100
     print(max_y)
     plt.ylim(min_y, max_y)
     plt.xlim(0, len(y) - 1)

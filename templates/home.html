@@ -2,21 +2,17 @@
 {% block content %}
 <div class="container">
     {% if not user %}
-    <h1>
+    <h1 class="display-1">
         Welcome to arugo.
     </h1>
     {% else %}
-    <h1>
+    <h1 class="display-2">
         Hello, {{user.handle}}!
     </h1>
-    <p>
-        Your rating: {{user.virtual_rating}}.
-    </p>
+    <p> Your rating: {{user.virtual_rating}}. </p>
     <a class="btn btn-warning" href="{% url 'reset-progress' %}"> Reset progress.</a>
     <br>
-    <p>
-        Rating progress: {{user.rating_progress}}
-    </p>
+    <p> Rating progress: {{user.rating_progress}} </p>
 
     <p> {{graph|safe}} </p>
 

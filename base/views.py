@@ -39,7 +39,7 @@ def challenge_list(request):
     context = {}
 
     context["challenges"] = get_challenge(
-        handle, [normalized_rating + delta for delta in range(-200, 500, 100)]
+        handle, profile.virtual_rating, [normalized_rating + delta for delta in range(-200, 500, 100)]
     )
 
     return render(request, "list.html", context)
