@@ -10,9 +10,12 @@ from .util import *
 def index(request):
     context = {}
     context["user"] = None
+    context["graph"] = None
 
     if request.user.is_authenticated:
-        context["user"] = Profile.objects.get(user=request.user)
+        profile = Profile.objects.get(user=request.user)
+        context["user"] = profile
+        context["graph"] = make_graph(eval(profile.rating_progress))
 
     return render(request, "home.html", context)
 
@@ -84,8 +87,6 @@ def register(request):
         password = request.POST.get("password")
         rating = request.POST.get("rating")
         handle = username
-
-        print(username, password, handle)
 
         if not represents_int(rating):
             context["error"].append("Rating is not an integer.")

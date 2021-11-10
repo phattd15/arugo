@@ -16,6 +16,9 @@
         <p>
             Rating progress: {{user.rating_progress}}
         </p>
+        
+        <p> {{graph|safe}} </p>
+
     {% endif %}
     </div>
 {% endblock content %}

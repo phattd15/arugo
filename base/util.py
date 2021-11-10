@@ -5,6 +5,9 @@ from .models import Problem
 from random import randint
 from datetime import datetime, timedelta
 from django.utils import timezone
+import matplotlib.pyplot as plt
+from io import StringIO
+import numpy as np
 
 
 def read_data(url):
@@ -197,3 +200,38 @@ def validate_challenge(profile):
 #     sum = magnitude * 5
 
 #     return []
+
+
+def make_graph(y):
+    fig = plt.figure()
+    fig.set_size_inches(12.5, 5.5)
+    x = range(len(y))
+    max_y = max(y)
+    max_y = max_y + 200 - max_y % 100
+    min_y = min(y)
+    min_y = min_y - 100 - min_y % 100
+    print(max_y)
+    plt.ylim(min_y, max_y)
+    plt.xlim(0, len(y) - 1)
+
+    cp = [0, 1200, 1400, 1600, 1900, 2100, 2300, 2400, 2600, 3000, 3600]
+
+    for i in range(10):
+        cl, bcl = rating_color(cp[i])
+        plt.axhspan(cp[i], cp[i + 1], color=bcl)
+
+    plt.plot(x, y)
+    imgdata = StringIO()
+    fig.savefig(imgdata, format="svg")
+    # imgdata.seek(0)
+
+    data = imgdata.getvalue()
+    return data
+
+
+def reset_progress(profile):
+    progress = eval(profile.rating_progress)
+    progress = progress[-1]
+
+    profile.rating_progress = repr(progress)
+    profile.save()
