@@ -30,7 +30,7 @@
     <div class="container">
         <h1 class="display-2">Hello, <span style="color:{{xcolor}}">{{profile.handle}}</span>!</h1>
     </div>
-    {% if profile.handle == 'shxgun' %}
+    <!-- {% if profile.handle == 'shxgun' %}
     <div class="container">
         <form method="POST">
             {% csrf_token %}
@@ -41,7 +41,7 @@
             </div>
         </form>
     </div>
-    {% endif %}
+    {% endif %} -->
     <div class="container">
         <p> Your rating: <span style="color:{{xcolor}}">{{profile.virtual_rating}}</span>  <a class="btn btn-warning" href="{% url 'reset-progress' %}">Reset progress</a></p>
     </div>

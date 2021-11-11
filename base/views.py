@@ -200,7 +200,6 @@ def giveup(request):
     user = request.user
     profile = Profile.objects.get(user=user)
 
-    # TODO: Make a give up function in util
     if profile.in_progress:
         give_up_problem(profile)
 
