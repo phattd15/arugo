@@ -27,11 +27,13 @@
     </div>
     {% for problem, color, bg_color, gain, loss, xcolor in challenges %}
     <div class="alert container" style="border-width: 2px; border-color: {{color}}; background-color: {{bg_color}};">
-        <a class="btn btn-lg" style="width: 970px; text-align: left; background-color: {{xcolor}}; color: #ffffff"
+        <!-- <a class="btn btn-outline btn-lg" style="width: 970px; text-align: left; background-color: {{xcolor}}; color: #ffffff"
+            href="https://codeforces.com/contest/{{problem.contest_id}}/problem/{{problem.index}}" target="_blank">
+            {{ problem }} </a> -->
+            <a class="btn btn-outline-dark btn-lg" style="width: 970px; text-align: left;"
             href="https://codeforces.com/contest/{{problem.contest_id}}/problem/{{problem.index}}" target="_blank">
             {{ problem }} </a>
-
-        <a class="btn btn-warning btn-lg" style="float: right; width: 280px"href="{% url 'solve' problem.contest_id problem.index %}"> Pick
+        <a class="btn btn-outline-dark btn-lg" style="float: right; width: 280px"href="{% url 'solve' problem.contest_id problem.index %}"> Pick
             this challenge <span class="text-success">{{gain}}</span> | <span class="text-danger">{{loss}}</span> </a>
     </div>
     {% endfor %}
