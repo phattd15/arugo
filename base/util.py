@@ -198,7 +198,7 @@ def apply_rating_change(profile, delta, direct_apply=False):
     whole_rating = eval(profile.rating_progress)
     whole_rating.append(profile.virtual_rating)
 
-    if len(whole_rating) > 30:
+    if len(whole_rating) > 150:
         whole_rating.pop(0)
 
     profile.rating_progress = repr(whole_rating)

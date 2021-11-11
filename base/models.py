@@ -37,7 +37,7 @@ class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     handle = models.CharField(max_length=40)
     registration_date = models.DateField(auto_now_add=True)
-    rating_progress = models.CharField(max_length=200, default="[]")
+    rating_progress = models.CharField(max_length=1000, default="[]")
     virtual_rating = models.IntegerField(default=1400)
     in_progress = models.BooleanField(default=False)
     current_problem = models.CharField(max_length=20, default="Unselected")
