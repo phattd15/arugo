@@ -62,8 +62,16 @@ def validate_handle(handle):
         return False
 
 
+# TODO: investigate this later. Bug caused by acmsguru.
 def submission_to_problem(submission):
-    return str(submission["contestId"]) + submission["problem"]["index"]
+    try:
+        str(submission["problem"]["contestId"]) + submission["problem"]["index"]
+
+    except:
+        print(submission)
+        return "1000A"
+
+    return str(submission["problem"]["contestId"]) + submission["problem"]["index"]
 
 
 def rating_color(rating):
