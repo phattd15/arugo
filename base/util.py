@@ -159,14 +159,30 @@ def validate_registration(handle):
     )
 
 
+def safe_submission(submission):
+    try:
+        submission["problem"]["contestId"]
+        submission["problem"]["index"]
+
+    except:
+        return False
+
+    return True
+
+
 def validate_solution(handle, problem_id):
-    latest_data = get_latest_submissions(handle, 1)
-    return (
-        latest_data[0]["verdict"] == "OK"
-        and str(latest_data[0]["problem"]["contestId"])
-        + latest_data[0]["problem"]["index"]
-        == problem_id
-    )
+    latest_data = get_latest_submissions(handle, 20)
+    for submission in latest_data:
+        if safe_submission(submission):
+            if (
+                submission["verdict"] == "OK"
+                and str(submission["problem"]["contestId"])
+                + submission["problem"]["index"]
+                == problem_id
+            ):
+                return True
+
+    return False
 
 
 def accept_challenge(profile, contest_id, index):
