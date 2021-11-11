@@ -14,3 +14,4 @@ Virtual rating system for codeforces using codeforces API.
 - [Django framework](https://www.djangoproject.com/)
 - [Codeforces API](https://codeforces.com/apiHelp)
 - [Matplotlib](https://matplotlib.org/)
+- [Bootstrap 5](https://getbootstrap.com/)
