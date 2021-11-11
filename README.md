@@ -1,3 +1,6 @@
+![Twitter](https://img.shields.io/twitter/url?label=%40polarity_iniad&style=social&url=https%3A%2F%2Ftwitter.com%2Fpolarity_iniad)
+![Website](https://img.shields.io/website?up_message=arugo&url=https%3A%2F%2Farugo.herokuapp.com%2F)
+
 # [Arugo](https://arugo.herokuapp.com/)
 Virtual rating system for codeforces using codeforces API.
 
