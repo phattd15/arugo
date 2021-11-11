@@ -275,9 +275,9 @@ def make_graph(handle, y):
     fig.set_size_inches(12.5, 5.5)
     x = range(len(y))
     max_y = max(y)
-    max_y = max_y + 100 - max_y % 100
+    max_y = max_y + 150
     min_y = min(y)
-    min_y = min_y - 50 - min_y % 100
+    min_y = min_y - 150
     plt.ylim(min_y, max_y)
     plt.xlim(0, len(y) - 1)
 
