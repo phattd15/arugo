@@ -173,6 +173,7 @@ def challenge_site(request):
     context["loss"] = rating_loss(profile.virtual_rating, problem.rating)
     context["user"] = request.user
     context["profile"] = profile
+    context["xcolor"] = color_rating_2(problem.rating)
 
     return render(request, "challenge.html", context)
 

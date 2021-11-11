@@ -142,6 +142,7 @@ def get_challenge(handle, user_rating, rating):
                 bg_color,
                 rating_gain(user_rating, rt),
                 rating_loss(user_rating, rt),
+                color_rating_2(rt),
             )
         )
 
@@ -257,7 +258,7 @@ def color_rating_2(rating):
         "#6fc7c1",
         "#6e78c4",
         "#ad6eb8",
-        "#d1ce75",
+        "#aba84d",
         "#edab5a",
         "#ed5555",
         "#f50505",
@@ -344,7 +345,7 @@ def update_progress(profile, s):
 
     progress = list(map(int, s.split()))
 
-    while len(progress) > 30:
+    while len(progress) > 150:
         progress.pop()
 
     for i in range(len(progress)):
