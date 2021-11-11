@@ -21,27 +21,34 @@
 
         <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExample08">
             <ul class="navbar-nav">
+                {% if not user.is_authenticated %}
                 <li class="nav-item active">
-                    <a class="nav-link" href="#"> Arugo </a>
+                    <a class="nav-link" href="{% url 'home-page' %}"> Arugo </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-item nav-link" href="{% url 'login' %}"> Login </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-item nav-link" href="{% url 'logout' %}"> Logout </a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-item nav-link" href="{% url 'register' %}"> Register </a>
                 </li>
+                {% else %}
                 <li class="nav-item">
-                    <a class="nav-item nav-link" href="{% url 'home-page' %}"> Home Page </a>
+                    <a class="nav-item nav-link" href="{% url 'home-page' %}"> {{profile.handle}} </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-item nav-link" href="{% url 'list' %}"> List </a>
+                    <a class="nav-item nav-link" href="{% url 'logout' %}"> Logout </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-item nav-link" href="{% url 'challenge' %}"> Challenge </a>
-                </li>
+                    {% if profile.in_progress %}
+                        <li class="nav-item">
+                            <a class="nav-item nav-link" href="{% url 'challenge' %}"> Challenge </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-item nav-link" href="{% url 'list' %}"> List </a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+
                 <li class="nav-item">
                     <a class="nav-item nav-link" href="{% url 'help' %}"> About / Help </a>
                 </li>

@@ -11,6 +11,7 @@ def index(request):
     context = {}
     context["user"] = None
     context["graph"] = None
+    context["user"] = request.user
 
     if request.user.is_authenticated:
         profile = Profile.objects.get(user=request.user)
@@ -18,7 +19,7 @@ def index(request):
         if request.method == "POST":
             update_progress(profile, request.POST.get("progress"))
 
-        context["user"] = profile
+        context["profile"] = profile
         context["graph"] = make_graph(profile.handle, eval(profile.rating_progress))
         context["xcolor"] = color_rating_2(profile.virtual_rating)
 
@@ -48,7 +49,8 @@ def challenge_list(request):
 
     normalized_rating = rating - rating % 100
     context = {}
-
+    context["user"] = user
+    context["profile"] = profile
     context["challenges"] = get_challenge(
         handle,
         profile.virtual_rating,
@@ -64,7 +66,8 @@ def login_view(request):
 
     context = {}
     context["error"] = []
-
+    context["user"] = request.user
+    
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -164,7 +167,8 @@ def challenge_site(request):
     context["bg_color"] = bg_color
     context["gain"] = rating_gain(profile.virtual_rating, problem.rating)
     context["loss"] = rating_loss(profile.virtual_rating, problem.rating)
-
+    context["user"] = request.user
+    context["profile"] = profile
     return render(request, "challenge.html", context)
 
 
@@ -209,4 +213,12 @@ def reset_progress(request):
 
 
 def help(request):
-    return render(request, "help.html")
+    context = {}
+    context["user"] = request.user
+    context["profile"] = None
+
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user=request.user)
+        context["profile"] = profile
+
+    return render(request, "help.html", context)

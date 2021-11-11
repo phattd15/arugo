@@ -1,7 +1,7 @@
 {% extends 'main.html' %}
 {% block content %}
 <div class="container">
-    {% if not user %}
+    {% if not user.is_authenticated %}
     <div class="container">
         <h1 class="display-1">
             Welcome to arugo
@@ -28,7 +28,7 @@
 
     {% else %}
     <div class="container">
-        <h1 class="display-2">Hello, <span style="color:{{xcolor}}">{{user.handle}}</span>!</h1>
+        <h1 class="display-2">Hello, <span style="color:{{xcolor}}">{{profile.handle}}</span>!</h1>
     </div>
     <div class="container">
         <form method="POST">
@@ -41,7 +41,7 @@
         </form>
     </div>
     <div class="container">
-        <p> Your rating: <span style="color:{{xcolor}}">{{user.virtual_rating}}</span>. <a class="btn btn-warning" href="{% url 'reset-progress' %}">Reset progress</a></p>
+        <p> Your rating: <span style="color:{{xcolor}}">{{profile.virtual_rating}}</span>. <a class="btn btn-warning" href="{% url 'reset-progress' %}">Reset progress</a></p>
         <!-- <p>Rating progress: {{user.rating_progress}} </p> -->
     </div>
     <p> {{graph|safe}} </p>
