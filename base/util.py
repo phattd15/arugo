@@ -240,7 +240,7 @@ def validate_challenge(profile):
 
 
 def rating_gain(user_rating, problem_rating, magnitude=10):
-    chance = 1 / (1 + 10 ** ((problem_rating - user_rating) / 500))
+    chance = 1 / (1.15 + 10 ** ((problem_rating - user_rating) / 500))
     return min(magnitude * 10, int(math.floor(magnitude * (0.5 / chance))))
 
 
