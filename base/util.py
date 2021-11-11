@@ -357,3 +357,12 @@ def update_progress(profile, s):
     profile.rating_progress = repr(progress)
     profile.virtual_rating = progress[-1]
     profile.save()
+
+
+def remaining_time_convert(rem):
+    rem = int(rem)
+    rem = math.floor(rem)
+    minutes = rem // 60
+    seconds = rem % 60
+
+    return (minutes, seconds)

@@ -67,7 +67,7 @@ def login_view(request):
     context = {}
     context["error"] = []
     context["user"] = request.user
-    
+
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -162,13 +162,18 @@ def challenge_site(request):
 
     context = {}
     context["problem"] = problem
-    context["time_remaining"] = (profile.deadline - timezone.now()).total_seconds()
+    minutes, seconds = remaining_time_convert(
+        (profile.deadline - timezone.now()).total_seconds()
+    )
+    context["minutes"] = minutes
+    context["seconds"] = seconds
     context["color"] = color
     context["bg_color"] = bg_color
     context["gain"] = rating_gain(profile.virtual_rating, problem.rating)
     context["loss"] = rating_loss(profile.virtual_rating, problem.rating)
     context["user"] = request.user
     context["profile"] = profile
+
     return render(request, "challenge.html", context)
 
 
