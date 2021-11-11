@@ -41,8 +41,7 @@
         </form>
     </div>
     <div class="container">
-        <p> Your rating: <span style="color:{{xcolor}}">{{profile.virtual_rating}}</span>. <a class="btn btn-warning" href="{% url 'reset-progress' %}">Reset progress</a></p>
-        <!-- <p>Rating progress: {{user.rating_progress}} </p> -->
+        <p> Your rating: <span style="color:{{xcolor}}">{{profile.virtual_rating}}</span>  <a class="btn btn-warning" href="{% url 'reset-progress' %}">Reset progress</a></p>
     </div>
     <p> {{graph|safe}} </p>
 
