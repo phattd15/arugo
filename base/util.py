@@ -21,6 +21,8 @@ def read_data(url):
 def fetch_problemset():
     URL = "https://codeforces.com/api/problemset.problems"
 
+    Problem.objects.all().delete()
+
     data = read_data(URL)
     problemset = data["problems"]
 
