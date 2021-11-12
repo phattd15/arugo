@@ -44,7 +44,7 @@ def fetch_problemset():
 
 def get_latest_submissions(handle, cnt=500):
     cnt = min(cnt, 3000)
-    URL = "https://codeforces.com/api/user.status?handle={}&from=1&cnt={}".format(
+    URL = "https://codeforces.com/api/user.status?handle={}&from=1&count={}".format(
         handle, cnt
     )
     return read_data(URL)
@@ -113,7 +113,7 @@ def rating_color(rating):
 
 
 def get_challenge(handle, user_rating, rating):
-    latest_data = get_latest_submissions(handle, 2000)
+    latest_data = get_latest_submissions(handle, 3000)
     latest_data = filter(lambda submission: submission["verdict"] == "OK", latest_data)
     problem_id_only = set(map(submission_to_problem, latest_data))
     res = []

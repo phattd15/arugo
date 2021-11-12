@@ -21,7 +21,7 @@ class Problem(models.Model):
             + self.index
             + ": "
             + self.name
-            + ", rating = "
+            + ", "
             + str(self.rating)
         )
 
