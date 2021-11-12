@@ -14,6 +14,7 @@ def index(request):
     context["user"] = None
     context["graph"] = None
     context["user"] = request.user
+    context["user_count"] = len(User.objects.all())
 
     if request.user.is_authenticated:
         profile = Profile.objects.get(user=user)
