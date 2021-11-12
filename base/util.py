@@ -25,7 +25,11 @@ def fetch_problemset():
     problemset = data["problems"]
 
     for problem in problemset:
-        if problem["type"] != "PROGRAMMING" or not "rating" in problem:
+        if (
+            problem["type"] != "PROGRAMMING"
+            or not "rating" in problem
+            or "*special" in problem["tags"]
+        ):
             continue
         p = Problem(
             contest_id=problem["contestId"],
@@ -201,9 +205,6 @@ def parse_problem_id(problem_id):
     for i in range(len(problem_id)):
         if not problem_id[i].isdigit():
             return (problem_id[:i], problem_id[i:])
-
-
-# def get_rating
 
 
 def apply_rating_change(profile, delta, direct_apply=False):
