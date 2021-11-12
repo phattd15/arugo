@@ -155,18 +155,9 @@ def get_challenge(handle, user_rating, rating):
     return res
 
 
-def validate_registration(handle):
-    latest_data = get_latest_submissions(handle, 1)
-    return (
-        len(latest_data) > 0
-        and latest_data[0]["verdict"] == "COMPILATION_ERROR"
-        and latest_data[0]["problem"]["contestId"] == 1302
-        and latest_data[0]["problem"]["index"] == "I"
-    )
-
-
 def safe_submission(submission):
     try:
+        submission["verdict"]
         submission["problem"]["contestId"]
         submission["problem"]["index"]
 
@@ -174,6 +165,18 @@ def safe_submission(submission):
         return False
 
     return True
+
+
+def validate_registration(handle):
+    latest_data = get_latest_submissions(handle, 1)
+
+    if len(latest_data) > 0 and safe_submission(latest_data[0]):
+        return (
+            len(latest_data) > 0
+            and latest_data[0]["verdict"] == "COMPILATION_ERROR"
+            and latest_data[0]["problem"]["contestId"] == 1302
+            and latest_data[0]["problem"]["index"] == "I"
+        )
 
 
 def validate_solution(handle, problem_id):
