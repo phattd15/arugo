@@ -8,16 +8,20 @@ from .util import *
 
 
 def index(request):
+    user = request.user
+
     context = {}
     context["user"] = None
     context["graph"] = None
     context["user"] = request.user
 
     if request.user.is_authenticated:
-        profile = Profile.objects.get(user=request.user)
+        profile = Profile.objects.get(user=user)
 
-        if request.method == "POST":
-            update_progress(profile, request.POST.get("progress"))
+        if request.method == "POST" and user.check_password(
+            request.POST.get("password")
+        ):
+            return redirect("reset-progress")
 
         context["profile"] = profile
         context["graph"] = make_graph(profile.handle, eval(profile.rating_progress))
