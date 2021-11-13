@@ -35,5 +35,17 @@ Change the settings as follow:
 SECRET_KEY = '<Generate your key @ https://djecrety.ir/>'
 DEBUG = True
 ```
-
-
+### 4. Migrate
+```
+python manage.py migrate
+```
+### 5. Fetch the problemset
+Run the shell
+```
+python manage.py shell
+```
+Run the script
+```
+from .util import fetch_problemset
+fetch_problemset()
+```
