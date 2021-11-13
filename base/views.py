@@ -3,6 +3,7 @@ from .models import Profile, Problem, AuthQuery
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
+from django.contrib.auth.hashers import make_password
 
 from .util import *
 
@@ -127,6 +128,7 @@ def register(request):
             rating = int(rating)
             query = 1
             problem = get_random_problem()
+            password = make_password(password)
 
             if AuthQuery.objects.filter(handle=handle).exists():
                 query = AuthQuery.objects.get(handle=handle)

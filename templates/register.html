@@ -9,7 +9,7 @@
     {% for err, ok_err in error%}
     {% if ok_err%}
     <div class="alert alert-warning" role="alert">
-        {{err}} <a href="https://codeforces.com/contest/{{contest_id}}/problem/{{index}}" target="_blank">{{contest_id}}{{index}}</a>. Please make sure that when you validate the request, CE is the last submission from your account to Codeforces.
+        {{err}} <a href="https://codeforces.com/contest/{{contest_id}}/problem/{{index}}" target="_blank">{{contest_id}}{{index}}</a>. Please make sure that when you validate the request, CE is the last submission from your account to Codeforces. The request will expires in 2 minutes.
     </div>
     {% else %}
     <div class="alert alert-danger" role="alert">

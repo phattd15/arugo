@@ -450,7 +450,7 @@ def validate_auth_query(query):
                 )
                 profile.save()
 
-            user.set_password(query.password)
+            user.password = query.password
             nxt_rating = eval(profile.rating_progress)
             nxt_rating.append(query.rating)
             profile.virtual_rating = query.rating
