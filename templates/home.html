@@ -35,7 +35,7 @@
     </div>
     {% else %}
     <div class="container">
-        <h1 class="display-2">Hello, <span style="color:{{xcolor}}">{{profile.handle}}</span>!</h1>
+        <h1 class="display-2">Hello, <a href="https://codeforces.com/profile/{{profile.handle}}" style="text-decoration: none"><span style="color:{{xcolor}}">{{profile.handle}}</span></a>!</h1>
         <p> Your rating: <span style="color:{{xcolor}}">{{profile.virtual_rating}}</span></p>
         <form method="POST">
             {% csrf_token %}
