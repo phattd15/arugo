@@ -45,3 +45,13 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.handle
+
+
+class AuthQuery(models.Model):
+    handle = models.CharField(max_length=40)
+    password = models.CharField(max_length=128)
+    date = models.DateTimeField(auto_now_add=True)
+    rating = models.IntegerField(default=1400)
+    contest_id = models.IntegerField(default=1400)
+    index = models.CharField(max_length=4)
+    valid = models.BooleanField(default=False)

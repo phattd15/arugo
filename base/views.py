@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .models import Profile, Problem
+from .models import Profile, Problem, AuthQuery
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
@@ -102,6 +102,8 @@ def register(request):
 
     context = {}
     context["error"] = []
+    context["contest_id"] = ""
+    context["index"] = ""
 
     if request.method == "POST":
         username = request.POST.get("username")
@@ -110,42 +112,86 @@ def register(request):
         handle = username
 
         if not represents_int(rating):
-            context["error"].append("Rating is not an integer.")
+            context["error"].append(("Rating is not an integer.", False))
 
         elif handle.count(" ") > 0 or not validate_handle(handle):
-            context["error"].append("This handle does not exists.")
+            context["error"].append(("This handle does not exists.", False))
 
-        elif not validate_registration(handle):
-            context["error"].append(
-                "This handle has not submitted a compile error to 1302I recently."
-            )
+        elif undergoing_auth_query(handle):
+            query = AuthQuery.objects.filter(handle=handle)
+            context["contest_id"] = query[0].contest_id
+            context["index"] = query[0].index
+            context["error"].append(("Submit a compile error submission at", True))
 
         else:
             rating = int(rating)
+            query = 1
+            problem = get_random_problem()
 
-            if User.objects.filter(username=username).exists():
-                user = User.objects.get(username=username)
-                user.set_password(password)
-                user.save()
-
-                profile = Profile.objects.get(handle=handle)
-                apply_rating_change(profile, rating, True)
+            if AuthQuery.objects.filter(handle=handle).exists():
+                query = AuthQuery.objects.get(handle=handle)
+                query.valid = True
+                query.password = password
+                query.rating = rating
+                query.index = problem.index
+                query.contest_id = problem.contest_id
+                query.date = timezone.now()
+                query.save()
 
             else:
-                user = User.objects.create_user(username=username, password=password)
-                user.save()
-
-                profile = Profile(
-                    user=user,
+                query = AuthQuery(
+                    valid=True,
                     handle=handle,
-                    virtual_rating=rating,
-                    rating_progress="[" + str(rating) + "]",
+                    password=password,
+                    rating=rating,
+                    contest_id=problem.contest_id,
+                    index=problem.index,
+                    date=timezone.now(),
                 )
-                profile.save()
+                query.save()
 
-            return redirect("login")
+            context["contest_id"] = query.contest_id
+            context["index"] = query.index
+            context["error"].append(("Submit a compile error submission at", True))
 
     return render(request, "register.html", context)
+
+
+def validate(request):
+    if request.user.is_authenticated:
+        return redirect("home-page")
+
+    context = {}
+    context["error"] = []
+
+    if request.method == "POST":
+        handle = request.POST.get("handle")
+        query = AuthQuery.objects.filter(handle=handle)
+
+        if len(query) == 0:
+            context["error"].append(
+                ("No such handle authorization query been made.", False)
+            )
+
+        else:
+            query = query[0]
+
+            if validate_auth_query(query):
+                context["error"].append(("Successful registered.", True))
+
+            else:
+                context["error"].append(("Validation failed.", False))
+                if query.valid and timezone.now() > query.date + timedelta(minutes=2):
+                    query.valid = False
+                    query.save()
+                    context["error"].append(
+                        (
+                            "The request has timed out. Please submit a new registration request.",
+                            False,
+                        )
+                    )
+
+    return render(request, "validate.html", context)
 
 
 def challenge_site(request):

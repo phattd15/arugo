@@ -4,19 +4,18 @@
 <div class="container">
     <h1 class="display-1"> Register </h1>
     <p>
-        To prove that you own the handle, first head to your Codeforces account and submit a compile error submission to <a
-            class="link-primary" href="https://codeforces.com/contest/1302/problem/I" target="_blank">1302I</a>. Please
-        make sure that by the
-        time you submit
-        the request, CE is the last submission by your account to Codeforces.
-    </p>
-    <p>
         Virtual rating is the rating level you are currently in or the one you want to start with.
     </p>
-    {% for err in error%}
+    {% for err, ok_err in error%}
+    {% if ok_err%}
+    <div class="alert alert-warning" role="alert">
+        {{err}} <a href="https://codeforces.com/contest/{{contest_id}}/problem/{{index}}" target="_blank">{{contest_id}}{{index}}</a>. Please make sure that when you validate the request, CE is the last submission from your account to Codeforces.
+    </div>
+    {% else %}
     <div class="alert alert-danger" role="alert">
         {{err}}
     </div>
+    {% endif %}
     {% endfor %}
 </div>
 <div class="container">
@@ -37,6 +36,7 @@
                 name="rating">
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
+        <a class="btn btn-warning" href="{%url 'validate'%}">Validate</a>
     </form>
 </div>
 

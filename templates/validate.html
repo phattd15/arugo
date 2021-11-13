@@ -1,0 +1,33 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="display-1"> Validate </h1>
+    <p>
+        Please make sure that when you validate the request, CE is the last submission from your account to Codeforces.
+    </p>
+    {% for err, ok_err in error%}
+    {% if ok_err%}
+    <div class="alert alert-success" role="alert">
+        {{err}}
+    </div>
+    {% else %}
+    <div class="alert alert-danger" role="alert">
+        {{err}}
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+<div class="container">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="handle">Codeforces Handle </label>
+            <input type="handle" class="form-control" id="handle" name="handle"
+                placeholder="Your handle from registration">
+        </div>
+        <button type="submit" class="btn btn-primary">Validate</button>
+    </form>
+</div>
+
+{% endblock content %}

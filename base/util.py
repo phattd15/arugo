@@ -1,4 +1,5 @@
-from .models import Problem
+from .models import AuthQuery, Problem, Profile
+from django.contrib.auth.models import User
 import json
 from urllib.request import urlopen
 from .models import Problem
@@ -33,6 +34,10 @@ def fetch_problemset():
             or "*special" in problem["tags"]
         ):
             continue
+
+        if represents_int(problem["index"]):
+            continue
+
         p = Problem(
             contest_id=problem["contestId"],
             name=problem["name"],
@@ -389,3 +394,72 @@ def remaining_time_convert(rem):
     seconds = rem % 60
 
     return (minutes, seconds)
+
+
+# def query_timeout(handle):
+
+
+def undergoing_auth_query(handle):
+    query = AuthQuery.objects.filter(handle=handle)
+
+    return len(query) > 0 and query[0].valid
+
+
+def get_random_problem():
+    id = randint(1, 6000)
+    pp = Problem.objects.all()
+    return pp[id]
+
+
+def validate_auth_query(query):
+    if not query.valid:
+        return False
+
+    latest_data = get_latest_submissions(query.handle, 1)
+
+    if len(latest_data) == 0:
+        return False
+
+    sub_time = latest_data[0]["creationTimeSeconds"]
+
+    if (
+        len(latest_data) > 0
+        and latest_data[0]["problem"]["contestId"] == query.contest_id
+        and latest_data[0]["problem"]["index"] == query.index
+    ):
+        deadline = query.date + timedelta(minutes=2)
+        if sub_time > query.date.timestamp() and sub_time < deadline.timestamp():
+            query.valid = False
+
+            user, profile = 1, 2
+
+            if User.objects.filter(username=query.handle).exists():
+                user = User.objects.get(username=query.handle)
+                profile = Profile.objects.get(handle=query.handle)
+
+            else:
+                user = User.objects.create_user(
+                    username=query.handle, password=query.password
+                )
+                user.save()
+                profile = Profile(
+                    user=user,
+                    handle=query.handle,
+                    virtual_rating=query.rating,
+                    rating_progress="[" + str(query.rating) + "]",
+                )
+                profile.save()
+
+            user.set_password(query.password)
+            profile.virtual_rating = query.rating
+            profile.rating_progress = "[" + str(query.rating) + "]"
+
+            user.save()
+            profile.save()
+            query.save()
+
+            return True
+
+        return False
+
+    return False

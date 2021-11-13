@@ -10,7 +10,8 @@ urlpatterns = [
     path("solving/<int:contest_id>/<str:index>/", views.solving, name="solve"),
     path("challenge/", views.challenge_site, name="challenge"),
     path("giveup/", views.giveup, name="giveup"),
-    path("reset_progress", views.reset_progress, name="reset-progress"),
-    path("help", views.help, name="help"),
+    path("reset_progress/", views.reset_progress, name="reset-progress"),
+    path("help/", views.help, name="help"),
+    path("validate/", views.validate, name="validate"),
     path("", views.index, name="home-page"),
 ]
