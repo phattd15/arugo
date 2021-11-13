@@ -446,13 +446,15 @@ def validate_auth_query(query):
                     user=user,
                     handle=query.handle,
                     virtual_rating=query.rating,
-                    rating_progress="[" + str(query.rating) + "]",
+                    rating_progress="[]",
                 )
                 profile.save()
 
             user.set_password(query.password)
+            nxt_rating = eval(profile.rating_progress)
+            nxt_rating.append(query.rating)
             profile.virtual_rating = query.rating
-            profile.rating_progress = "[" + str(query.rating) + "]"
+            profile.rating_progress = repr(nxt_rating)
 
             user.save()
             profile.save()
