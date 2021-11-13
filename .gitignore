@@ -1,3 +1,7 @@
 *.env
 /arugo/.env
 /db.sqlite3
+/base/__pycache__
+/arugo/__pycache__
+/base/__init__.py
+/arugo/__init__.py
