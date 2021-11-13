@@ -42,6 +42,7 @@ class Profile(models.Model):
     in_progress = models.BooleanField(default=False)
     current_problem = models.CharField(max_length=20, default="Unselected")
     deadline = models.DateTimeField(auto_now_add=True)
+    history = models.CharField(max_length=1000, default="[]")
 
     def __str__(self):
         return self.handle

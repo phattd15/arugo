@@ -217,7 +217,7 @@ def parse_problem_id(problem_id):
             return (problem_id[:i], problem_id[i:])
 
 
-def apply_rating_change(profile, delta, direct_apply=False):
+def apply_rating_change(profile, delta, problem, direct_apply=False):
     profile.virtual_rating += delta
 
     if direct_apply:
@@ -230,6 +230,14 @@ def apply_rating_change(profile, delta, direct_apply=False):
         whole_rating.pop(0)
 
     profile.rating_progress = repr(whole_rating)
+
+    history = eval(profile.history)
+    history.append((problem.contest_id, problem.index, delta))
+    profile.history = repr(history)
+
+    if len(history) > 20:
+        history.pop(0)
+
     profile.in_progress = False
     profile.save()
 
@@ -254,12 +262,12 @@ def validate_challenge(profile):
         else:
             delta = rating_loss(profile.virtual_rating, problem.rating)
 
-        apply_rating_change(profile, delta)
+        apply_rating_change(profile, delta, problem)
         return True
 
     elif validate_result:
         delta = rating_gain(profile.virtual_rating, problem.rating)
-        apply_rating_change(profile, delta)
+        apply_rating_change(profile, delta, problem)
         return True
 
     else:
@@ -349,7 +357,7 @@ def give_up_problem(profile):
     problem = Problem.objects.get(contest_id=contest_id, index=index)
     delta = rating_loss(profile.virtual_rating, problem.rating)
 
-    apply_rating_change(profile, delta)
+    apply_rating_change(profile, delta, problem)
 
 
 def can_be_parsed(s):

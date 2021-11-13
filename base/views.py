@@ -29,6 +29,15 @@ def index(request):
         context["graph"] = make_graph(profile.handle, eval(profile.rating_progress))
         context["xcolor"] = color_rating_2(profile.virtual_rating)
 
+        history = eval(profile.history)
+
+        context["history_data"] = []
+
+        for contest_id, index, delta in history:
+            problem = Problem.objects.get(contest_id=contest_id, index=index)
+            color, bg_color = rating_color(problem.rating)
+            context["history_data"].append((problem, color, bg_color, delta))
+
     return render(request, "home.html", context)
 
 
