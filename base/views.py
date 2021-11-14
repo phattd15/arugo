@@ -135,6 +135,8 @@ def register(request):
 
         else:
             rating = int(rating)
+            rating = min(rating, 3500)
+            rating = max(rating, 400)
             query = 1
             problem = get_random_problem()
             password = make_password(password)
