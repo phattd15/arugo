@@ -23,11 +23,11 @@ It is ideal to use virtualenv.
 
 ### 1. Fork and clone this project
 ```
-git clone https://github.com/polarity-cf/arugo.git
+$ git clone https://github.com/polarity-cf/arugo.git
 ```
 ### 2. Install dependencies
 ```
-pip install -r requirements.txt
+$ pip install -r requirements.txt
 ```
 ### 3. Set environment variables
 Create ```.env``` file in the ```arugo``` folder.
@@ -38,15 +38,15 @@ DEBUG = True
 ```
 ### 4. Migrate
 ```
-python manage.py migrate
+$ python manage.py migrate
 ```
 ### 5. Fetch the problemset
 Run the shell
 ```
-python manage.py shell
+$ python manage.py shell
 ```
 Run the script
 ```
-from base.util import fetch_problemset
-fetch_problemset()
+$ from base.util import fetch_problemset
+$ fetch_problemset()
 ```
