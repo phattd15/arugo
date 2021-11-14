@@ -47,6 +47,6 @@ python manage.py shell
 ```
 Run the script
 ```
-from .util import fetch_problemset
+from base.util import fetch_problemset
 fetch_problemset()
 ```
