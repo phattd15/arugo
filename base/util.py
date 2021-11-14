@@ -15,8 +15,10 @@ import math
 def read_data(url):
     response = urlopen(url)
     response_data = json.loads(response.read())
-
-    return response_data["result"]
+    if "result" in response_data:
+        return response_data["result"]
+    else:
+        return []
 
 
 def fetch_problemset():
