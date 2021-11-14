@@ -36,7 +36,7 @@ def fetch_problemset():
     data = read_data(URL)
     problemset = data["problems"]
 
-    for problem in problemset:
+    for problem in problemset[]:
         if (
             problem["type"] != "PROGRAMMING"
             or not "rating" in problem
@@ -54,6 +54,35 @@ def fetch_problemset():
             index=problem["index"],
         )
         p.save()
+
+def update_problemset():
+    URL = "https://codeforces.com/api/problemset.problems"
+
+    data = read_data(URL)
+    problemset = data["problems"]
+
+    for problem in problemset[-100:]:
+        if (
+            problem["type"] != "PROGRAMMING"
+            or not "rating" in problem
+            or "*special" in problem["tags"]
+        ):
+            continue
+
+        if represents_int(problem["index"]):
+            continue
+        
+        if Problem.objects.filter(contest_id=problem["contestId"], index=problem["index"]):
+            continue
+
+        p = Problem(
+            contest_id=problem["contestId"],
+            name=problem["name"],
+            rating=problem["rating"],
+            index=problem["index"],
+        )
+        p.save()
+
 
 
 def get_latest_submissions(handle, cnt=500):
