@@ -376,7 +376,7 @@ def make_graph(handle, y):
         plt.axhspan(cp[i], cp[i + 1], color=cl[i])
 
     plt.title(handle + "'s rating progress chart")
-    plt.plot(x, y, color="#ffffff")
+    plt.plot(x, y, marker="o", color="#ffffff")
     imgdata = StringIO()
     fig.savefig(imgdata, format="svg")
     # imgdata.seek(0)
