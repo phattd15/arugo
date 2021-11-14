@@ -62,7 +62,7 @@ def update_problemset():
     data = read_data(URL)
     problemset = data["problems"]
 
-    for problem in problemset[-100:]:
+    for problem in problemset[:100]:
         if (
             problem["type"] != "PROGRAMMING"
             or not "rating" in problem
