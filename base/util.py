@@ -119,7 +119,10 @@ def rating_color(rating):
 
 def get_challenge(handle, user_rating, rating):
     latest_data = get_latest_submissions(handle, 3000)
-    latest_data = filter(lambda submission: submission["verdict"] == "OK", latest_data)
+    latest_data = filter(
+        lambda submission: "verdict" in submission and submission["verdict"] == "OK",
+        latest_data,
+    )
     problem_id_only = set(map(submission_to_problem, latest_data))
     res = []
 
