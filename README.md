@@ -19,6 +19,7 @@ Virtual rating system for codeforces using codeforces API.
 - [Bootstrap 5](https://getbootstrap.com/)
 
 ## Setup:
+It is ideally to use virtualenv.
 
 ### 1. Fork and clone this project
 ```
