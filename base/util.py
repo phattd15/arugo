@@ -318,6 +318,11 @@ def validate_challenge(profile):
 
 
 def rating_gain(user_rating, problem_rating, magnitude=10):
+    if user_rating - problem_rating > 600:
+        return 2
+    elif user_rating - problem_rating > 1000:
+        return 1
+
     chance = 1 / (1.15 + 10 ** ((problem_rating - user_rating) / 500))
     return min(magnitude * 10, int(math.floor(magnitude * (0.5 / chance))))
 
