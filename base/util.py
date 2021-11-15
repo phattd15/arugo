@@ -2,7 +2,7 @@ from .models import AuthQuery, Problem, Profile
 from django.contrib.auth.models import User
 import json
 from urllib.request import urlopen
-from .models import Problem
+from .models import Problem, FetchData
 from random import randint
 from datetime import datetime, timedelta
 from django.utils import timezone
@@ -31,7 +31,11 @@ def read_data(url):
 def fetch_problemset():
     URL = "https://codeforces.com/api/problemset.problems"
 
+    FetchData.objects.all().delete()
     Problem.objects.all().delete()
+
+    fd = FetchData()
+    fd.save()
 
     data = read_data(URL)
     problemset = data["problems"]

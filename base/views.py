@@ -1,3 +1,4 @@
+from datetime import time
 from django.shortcuts import redirect, render
 from .models import Profile, Problem, AuthQuery
 from django.contrib.auth.models import User
@@ -52,6 +53,12 @@ def challenge_list(request):
 
     if profile.in_progress:
         return redirect("challenge")
+
+    fd = FetchData.objects.all()
+
+    if fd[0].last_update + timedelta(hours=12) < timezone.now():
+        update_problemset()
+        fd[0].last_update = timezone.now()
 
     if request.method == "POST":
         contest_id = request.POST.get("contest_id")

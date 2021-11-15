@@ -56,3 +56,12 @@ class AuthQuery(models.Model):
     contest_id = models.IntegerField(default=1400)
     index = models.CharField(max_length=4)
     valid = models.BooleanField(default=False)
+
+
+"""
+TODO: Fix this with async / celery later
+"""
+
+
+class FetchData(models.Model):
+    last_update = models.DateTimeField(auto_now_add=True)
