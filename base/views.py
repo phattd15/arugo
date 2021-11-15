@@ -38,6 +38,8 @@ def index(request):
             color, bg_color = rating_color(problem.rating)
             context["history_data"].append((problem, color, bg_color, delta))
 
+        context["history_data"].reverse()
+
     return render(request, "home.html", context)
 
 
