@@ -45,7 +45,7 @@ class Profile(models.Model):
     history = models.CharField(max_length=1000, default="[]")
 
     def __str__(self):
-        return self.handle
+        return self.handle + "|" + self.rating_progress
 
 
 class AuthQuery(models.Model):
