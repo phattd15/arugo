@@ -38,7 +38,7 @@
     </div>
     <div class="container">
         <p class="h4">What is the formula to my rating change?</p>
-        <p> Incase that you successfully solve the problem, your rating will increases by $$\min(10*magnitude, \lfloor{(1.15 + 10^{\frac{problem\_rating - user\_rating}{500}}) * 0.5*magnitude}\rfloor)$$ Else decreases by $$\min(10*magnitude, \lfloor{(1 + 10^{\frac{problem\_rating - user\_rating}{500}}) * 0.5*magnitude}\rfloor)$$ Here, magnitude is 10, which means if you solve a problem of your own rating range, then solving 10 of it should take you 100 rating above.</p>
+        <p> Incase that you successfully solve the problem, your rating will increases by $$\min(magnitude*10, \lfloor \frac{0.5*magnitude}{\frac{1.15}{1 + 10^{\frac{problem\_rating - user\_rating}{500}}}} \rfloor)$$ Else decreases by $$\min(magnitude*10, \lfloor \frac{0.5*magnitude}{1 - \frac{1}{1 + 10^{\frac{problem\_rating - user\_rating}{500}}}} \rfloor)$$ Here, magnitude is 10, which means if you solve a problem of your own rating range, then solving 10 of it should take you 100 rating above.</p>
         <hr>
     </div>
     <div class="container">
