@@ -447,9 +447,6 @@ def remaining_time_convert(rem):
     return (minutes, seconds)
 
 
-# def query_timeout(handle):
-
-
 def undergoing_auth_query(handle):
     query = AuthQuery.objects.filter(handle=handle)
 
