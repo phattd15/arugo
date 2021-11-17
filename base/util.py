@@ -334,7 +334,7 @@ def rating_gain(user_rating, problem_rating, magnitude=16):
 def rating_loss(user_rating, problem_rating, magnitude=16):
     chance = 1 / (1 + 10 ** ((problem_rating - user_rating) / 500))
     chance = 1 - chance
-    return max(-int(math.floor(magnitude * (0.5 / chance))), magnitude * -8)
+    return max(-int(math.floor(magnitude * (0.5 / chance))), magnitude * -8) + 1
 
 
 def color_rating_2(rating):
