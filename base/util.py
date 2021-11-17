@@ -321,20 +321,20 @@ def validate_challenge(profile):
         return False
 
 
-def rating_gain(user_rating, problem_rating, magnitude=10):
+def rating_gain(user_rating, problem_rating, magnitude=16):
     if user_rating - problem_rating > 600:
         return 2
     elif user_rating - problem_rating > 1000:
         return 1
 
     chance = 1 / (1.15 + 10 ** ((problem_rating - user_rating) / 500))
-    return min(magnitude * 10, int(math.floor(magnitude * (0.5 / chance))))
+    return min(magnitude * 8, int(math.floor(magnitude * (0.5 / chance))))
 
 
-def rating_loss(user_rating, problem_rating, magnitude=10):
+def rating_loss(user_rating, problem_rating, magnitude=16):
     chance = 1 / (1 + 10 ** ((problem_rating - user_rating) / 500))
     chance = 1 - chance
-    return max(-int(math.floor(magnitude * (0.5 / chance))), magnitude * -10)
+    return max(-int(math.floor(magnitude * (0.5 / chance))), magnitude * -8)
 
 
 def color_rating_2(rating):
