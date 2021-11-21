@@ -231,12 +231,13 @@ def validate_registration(handle):
         )
 
 
-def validate_solution(handle, problem_id):
+def validate_solution(handle, problem_id, deadline):
     latest_data = get_latest_submissions(handle, 20)
     for submission in latest_data:
         if safe_submission(submission):
             if (
-                submission["verdict"] == "OK"
+                submission["creationTimeSeconds"] < deadline.timestamp()
+                and submission["verdict"] == "OK"
                 and str(submission["problem"]["contestId"])
                 + submission["problem"]["index"]
                 == problem_id
@@ -293,7 +294,9 @@ def validate_challenge(profile):
     if not profile.in_progress:
         return False
 
-    validate_result = validate_solution(profile.handle, profile.current_problem)
+    validate_result = validate_solution(
+        profile.handle, profile.current_problem, profile.deadline
+    )
 
     contest_id, index = parse_problem_id(profile.current_problem)
     contest_id = int(contest_id)
