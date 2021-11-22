@@ -13,9 +13,9 @@ import math
 
 
 def read_data(url):
-    response = urlopen(url)
-    response_data = []
     try:
+        response = urlopen(url)
+        response_data = []
         response_data = json.loads(response.read())
 
         if "result" in response_data:
@@ -38,6 +38,10 @@ def fetch_problemset():
     fd.save()
 
     data = read_data(URL)
+
+    if data == [] or not "problems" in data:
+        return
+
     problemset = data["problems"]
 
     for problem in problemset:
@@ -64,6 +68,10 @@ def update_problemset():
     URL = "https://codeforces.com/api/problemset.problems"
 
     data = read_data(URL)
+
+    if data == [] or not "problems" in data:
+        return
+
     problemset = data["problems"]
 
     for problem in problemset[:100]:
