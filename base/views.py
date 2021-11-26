@@ -78,14 +78,18 @@ def challenge_list(request):
     context["user"] = user
     context["profile"] = profile
     context["state"] = profile.msg
+    context["api_is_down"] = False
     profile.msg = 0
     profile.save()
-    context["challenges"] = get_challenge(
-        handle,
-        profile.virtual_rating,
-        [normalized_rating + delta for delta in range(-200, 500, 100)],
-    )
-
+    context["challenges"] = []
+    if validate_handle(handle):
+        context["challenges"] = get_challenge(
+            handle,
+            profile.virtual_rating,
+            [normalized_rating + delta for delta in range(-200, 500, 100)],
+        )
+    else:
+        context["api_is_down"] = True
     return render(request, "list.html", context)
 
 

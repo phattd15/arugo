@@ -12,6 +12,11 @@
     </div>
     {% endif %}
 </div>
+{% if api_is_down %}
+    <div class="alert alert-danger" role="alert">
+        Codeforces API is currently down :( Please visit Arugo later :(
+    </div>
+{% else %}
 <div class="container">
     <h1 class="display-1">
         Challenge List
@@ -47,4 +52,5 @@
         <a class="btn btn-outline-dark btn-lg" style="float: right; width: 140px"href="{% url 'solve' problem.contest_id problem.index %}"><span class="text-success">{{gain}}</span> | <span class="text-danger">{{loss}}</span> </a>
     </div>
     {% endfor %}
+{% endif %}
 {% endblock content %}
