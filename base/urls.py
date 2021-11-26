@@ -13,5 +13,6 @@ urlpatterns = [
     path("reset_progress/", views.reset_progress, name="reset-progress"),
     path("help/", views.help, name="help"),
     path("validate/", views.validate, name="validate"),
+    path("discard/", views.discard, name="discard"),
     path("", views.index, name="home-page"),
 ]

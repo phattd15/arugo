@@ -300,3 +300,15 @@ def help(request):
         context["profile"] = profile
 
     return render(request, "help.html", context)
+
+
+def discard(request):
+    if not request.user.is_authenticated:
+        return redirect("home-page")
+
+    user = request.user
+    profile = Profile.objects.get(user=user)
+
+    discard_challenge(profile)
+
+    return redirect("list")
