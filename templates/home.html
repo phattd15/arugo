@@ -35,6 +35,17 @@
     </div>
     {% else %}
     <div class="container">
+        {% if state == 1 %}
+        <div class="alert alert-success" role="alert">
+            Congratulate on solving the last problem!
+        </div>
+        {% elif state == 2 %}
+        <div class="alert alert-warning" role="alert">
+            You failed the last challenge :( Try harder ?
+        </div>
+        {% endif %}
+    </div>
+    <div class="container">
         <h1 class="display-2">Hello, <a href="https://codeforces.com/profile/{{profile.handle}}" style="text-decoration: none"><span style="color:{{xcolor}}">{{profile.handle}}</span></a>!</h1>
         <p> Your rating: <span style="color:{{xcolor}}">{{profile.virtual_rating}}</span></p>
         <form method="POST">

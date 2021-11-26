@@ -29,7 +29,9 @@ def index(request):
         context["profile"] = profile
         context["graph"] = make_graph(profile.handle, eval(profile.rating_progress))
         context["xcolor"] = color_rating_2(profile.virtual_rating)
-
+        context["state"] = profile.msg
+        profile.msg = 0
+        profile.save()
         history = eval(profile.history)
 
         context["history_data"] = []
@@ -75,6 +77,9 @@ def challenge_list(request):
     context = {}
     context["user"] = user
     context["profile"] = profile
+    context["state"] = profile.msg
+    profile.msg = 0
+    profile.save()
     context["challenges"] = get_challenge(
         handle,
         profile.virtual_rating,
@@ -228,6 +233,9 @@ def challenge_site(request):
 
     if validate_challenge(profile):
         return redirect("list")
+
+    profile.msg = 0
+    profile.save()
 
     contest_id, index = parse_problem_id(profile.current_problem)
     problem = Problem.objects.get(contest_id=contest_id, index=index)

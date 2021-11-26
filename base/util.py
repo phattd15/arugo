@@ -227,18 +227,6 @@ def safe_submission(submission):
     return True
 
 
-def validate_registration(handle):
-    latest_data = get_latest_submissions(handle, 1)
-
-    if len(latest_data) > 0 and safe_submission(latest_data[0]):
-        return (
-            len(latest_data) > 0
-            and latest_data[0]["verdict"] == "COMPILATION_ERROR"
-            and latest_data[0]["problem"]["contestId"] == 1302
-            and latest_data[0]["problem"]["index"] == "I"
-        )
-
-
 def validate_solution(handle, problem_id, deadline):
     latest_data = get_latest_submissions(handle, 20)
     for submission in latest_data:
@@ -274,6 +262,7 @@ def parse_problem_id(problem_id):
 
 
 def apply_rating_change(profile, delta, problem, direct_apply=False):
+    profile.msg = 1 if delta > 0 else 2
     profile.virtual_rating += delta
 
     if direct_apply:
