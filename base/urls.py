@@ -15,4 +15,5 @@ urlpatterns = [
     path("validate/", views.validate, name="validate"),
     path("discard/", views.discard, name="discard"),
     path("", views.index, name="home-page"),
+    path("test/", views.testing, name="test"),
 ]

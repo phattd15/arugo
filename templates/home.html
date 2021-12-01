@@ -50,7 +50,7 @@
         <p> Your rating: <span style="color:{{xcolor}}">{{profile.virtual_rating}}</span></p>
         <form method="POST">
             {% csrf_token %}
-            <div class="input-group" style="width: 600px">
+            <div class="input-group">
                 <input type="password" class="form-control" id="password" name="password"
                     placeholder="Enter password to reset progress.">
                     <button type="submit" class="btn btn-primary">Reset</button>
@@ -61,13 +61,9 @@
     <p class="h4">User history</p>
     {% for problem, color, bg_color, delta in history_data %}
     <div class="alert container" style="border-width: 2px; border-color: {{color}}; background-color: {{bg_color}};">
-        <!-- <a class="btn btn-outline btn-lg" style="width: 970px; text-align: left; background-color: {{xcolor}}; color: #ffffff"
-            href="https://codeforces.com/contest/{{problem.contest_id}}/problem/{{problem.index}}" target="_blank">
-            {{ problem }} </a> -->
-            <a class="btn btn-lg" style="text-align: left; background-color: {{bg_color}};" 
-            href="https://codeforces.com/contest/{{problem.contest_id}}/problem/{{problem.index}}" target="_blank">
-            {{ problem }} </a>
-        
+        <a class="btn btn-lg" style="text-align: left; background-color: {{bg_color}};" 
+        href="https://codeforces.com/contest/{{problem.contest_id}}/problem/{{problem.index}}" target="_blank">
+        {{ problem }} </a>
         {% if delta >= 0 %}
         <a class="btn btn-outline-success btn-lg" style="float: right; width: 140px" href="#"> {{delta}}</a>
         {% else %}

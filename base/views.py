@@ -324,3 +324,7 @@ def discard(request):
     discard_challenge(profile)
 
     return redirect("list")
+
+
+def testing(request):
+    return render(request, "test.html")
