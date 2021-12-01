@@ -5,8 +5,6 @@
     <h1 class="display-1">
         Current Challenge
     </h1>
-<!-- </div>
-<div class="container"> -->
     <div class="alert" style="border-width: 2px; border-color: {{color}}; background-color: {{bg_color}}">
         <div class="container">
             <a class="btn btn-success btn-lg left-text" style="background-color: {{xcolor}};"
@@ -14,7 +12,7 @@
                 {{ problem }} </a>
         </div>
         <div class="container">
-            <p>
+            <p id="time_left">
                 Total time left for the challenge: {{minutes}} minutes {{seconds}} seconds.
             </p>
             <p>
@@ -36,5 +34,22 @@
             </a>
         </div>
     </div>
+    <script>
+        let m = {{minutes}};
+        let s = {{seconds}};
+        var interval = setInterval(() => {
+            if (!(m == 0 && s == 0)) {
+                if (s > 0) s --;
+                else {
+                    m --;
+                    s = 59;
+                }
+                document.getElementById("time_left").innerHTML = "Total time left for the challenge: " + m + " minutes " + s + " seconds."
+            } else {
+                document.getElementById("time_left").innerHTML = "Time is up."
+                document.location.reload(true);
+            }
+        }, 1000);
+    </script>
 </div>
 {% endblock content %}
