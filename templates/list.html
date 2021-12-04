@@ -1,5 +1,4 @@
 {% extends 'main.html' %}
-
 {% block content %}
 <div class="container">
     {% if state == 1 %}
@@ -21,36 +20,33 @@
     <h1 class="display-1">
         Challenge List
     </h1>
-    <h3>Manual Challenge Choice</h3>
 </div>
-    <div class="container">
-        <form method="POST">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="contest_id">Contest ID</label>
-                <input type="contest_id" class="form-control" id="contest_id" name="contest_id"
-                    placeholder="e.g: '1425'">
-            </div>
-            <div class="form-group">
-                <label for="index">Problem Index</label>
-                <input type="index" class="form-control" id="index" name="index" placeholder="e.g: 'A'">
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-    </div>
-    <div class = "container">
-        <h3>Suggested Challenge</h3>
-    </div>
-    {% for problem, color, bg_color, gain, loss, xcolor in challenges %}
-    <div class="alert container" style="border-width: 2px; border-color: {{color}}; background-color: {{bg_color}};">
-        <!-- <a class="btn btn-outline btn-lg" style="width: 970px; text-align: left; background-color: {{xcolor}}; color: #ffffff"
-            href="https://codeforces.com/contest/{{problem.contest_id}}/problem/{{problem.index}}" target="_blank">
-            {{ problem }} </a> -->
-            <a class="btn btn-lg" style="text-align: left; background-color: {{bg_color}};" 
-            href="https://codeforces.com/contest/{{problem.contest_id}}/problem/{{problem.index}}" target="_blank">
-            {{ problem }} </a>
-        <a class="btn btn-outline-dark btn-lg" style="float: right; width: 140px"href="{% url 'solve' problem.contest_id problem.index %}"><span class="text-success">{{gain}}</span> | <span class="text-danger">{{loss}}</span> </a>
-    </div>
-    {% endfor %}
+<div class="container">
+    <h3>Manual Challenge Choice</h3>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="contest_id">Contest ID</label>
+            <input type="contest_id" class="form-control" id="contest_id" name="contest_id"
+                placeholder="e.g: '1425'">
+        </div>
+        <div class="form-group">
+            <label for="index">Problem Index</label>
+            <input type="index" class="form-control" id="index" name="index" placeholder="e.g: 'A'">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+<div class = "container">
+    <h3>Suggested Challenge</h3>
+</div>
+{% for problem, color, bg_color, gain, loss, xcolor in challenges %}
+<div class="alert container" style="border-width: 2px; border-color: {{color}}; background-color: {{bg_color}};">
+    <a class="btn btn-lg" style="text-align: left; background-color: {{bg_color}};" 
+    href="https://codeforces.com/contest/{{problem.contest_id}}/problem/{{problem.index}}" target="_blank">
+    {{ problem }} </a>
+    <a class="btn btn-outline-dark btn-lg" style="float: right; width: 140px"href="{% url 'solve' problem.contest_id problem.index %}"><span class="text-success">{{gain}}</span> | <span class="text-danger">{{loss}}</span> </a>
+</div>
+{% endfor %}
 {% endif %}
 {% endblock content %}

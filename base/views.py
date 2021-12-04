@@ -250,6 +250,7 @@ def challenge_site(request):
     minutes, seconds = remaining_time_convert(
         (profile.deadline - timezone.now()).total_seconds()
     )
+    context["api_is_down"] = not validate_handle(profile.handle)
     context["minutes"] = minutes
     context["seconds"] = seconds
     context["color"] = color

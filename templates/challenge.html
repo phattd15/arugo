@@ -29,9 +29,11 @@
             <a class="btn btn-secondary" href="{% url 'challenge' %}">
                 Validate
             </a>
+            {% if api_is_down %}
             <a class="btn btn-info" href="{% url 'discard' %}">
-                Discard challenge
+                Discard challenge (API is currently down)
             </a>
+            {% endif %}
         </div>
     </div>
     <script>
