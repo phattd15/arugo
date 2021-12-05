@@ -65,6 +65,8 @@ def fetch_problemset():
 
 
 def update_problemset():
+    AuthQuery.objects.all().delete()
+
     URL = "https://codeforces.com/api/problemset.problems"
 
     data = read_data(URL)
