@@ -15,8 +15,7 @@ Virtual rating system for codeforces using codeforces API.
 - [Django framework](https://www.djangoproject.com/)
 - [Codeforces API](https://codeforces.com/apiHelp)
 - [Matplotlib](https://matplotlib.org/)
-- [Bootstrap 5](https://getbootstrap.com/)
-
+- [MongoDB & djongo](https://www.mongodb.com/compatibility/mongodb-and-django)
 ## Setup:
 It is ideal to use virtualenv.
 
@@ -30,10 +29,11 @@ $ pip install -r requirements.txt
 ```
 ### 3. Set environment variables
 Create ```.env``` file in the ```arugo``` folder.
-Change the settings as follow:
+Change the settings as follow, with your mongodb link:
 ```
 SECRET_KEY = '<Generate your key @ https://djecrety.ir/>'
 DEBUG = True
+DB_URL = 'mongodb+srv://<username>:<password>@<atlas cluster>/<myFirstDatabase>?retryWrites=true&w=majority'
 ```
 ### 4. Migrate
 ```
