@@ -80,7 +80,7 @@ DATABASES = {
         "NAME": "arugo",
         "ENFORCE_SCHEMA": False,
         "CLIENT": {
-            "host": DB_URL,
+            "host": MONGODB_URI,
         },
     },
 }
