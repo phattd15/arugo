@@ -37,7 +37,9 @@ def index(request):
         context["history_data"] = []
 
         for contest_id, index, delta in history:
-            problem = Problem.objects.get(contest_id=contest_id, index=index)
+            problem = Problem.objects.using("problemset").get(
+                contest_id=contest_id, index=index
+            )
             color, bg_color = rating_color(problem.rating)
             context["history_data"].append((problem, color, bg_color, delta))
 
@@ -56,11 +58,10 @@ def challenge_list(request):
     if profile.in_progress:
         return redirect("challenge")
 
-    fd = FetchData.objects.all()
+    fd = FetchData.objects.using("problemset").all()
 
     if fd[0].last_update + timedelta(hours=12) < timezone.now():
         update_problemset()
-        fd[0].last_update = timezone.now()
 
     if request.method == "POST":
         contest_id = request.POST.get("contest_id")
@@ -242,7 +243,9 @@ def challenge_site(request):
     profile.save()
 
     contest_id, index = parse_problem_id(profile.current_problem)
-    problem = Problem.objects.get(contest_id=contest_id, index=index)
+    problem = Problem.objects.using("problemset").get(
+        contest_id=contest_id, index=index
+    )
     color, bg_color = rating_color(problem.rating)
 
     context = {}

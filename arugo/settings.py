@@ -71,7 +71,15 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
-    }
+    },
+    "problemset": {
+        "ENGINE": "djongo",
+        "NAME": "arugo",
+        "ENFORCE_SCHEMA": False,
+        "CLIENT": {
+            "host": "mongodb+srv://p:p@cluster0.lu4wq.mongodb.net/arugo?retryWrites=true&w=majority"
+        },
+    },
 }
 
 

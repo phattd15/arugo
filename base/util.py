@@ -31,11 +31,11 @@ def read_data(url):
 def fetch_problemset():
     URL = "https://codeforces.com/api/problemset.problems"
 
-    FetchData.objects.all().delete()
-    Problem.objects.all().delete()
+    FetchData.objects.using("problemset").all().delete()
+    Problem.objects.using("problemset").all().delete()
 
     fd = FetchData()
-    fd.save()
+    fd.save(using="problemset")
 
     data = read_data(URL)
 
@@ -61,10 +61,12 @@ def fetch_problemset():
             rating=problem["rating"],
             index=problem["index"],
         )
-        p.save()
+        p.save(using="problemset")
 
 
 def update_problemset():
+    print("problemset updating")
+
     AuthQuery.objects.all().delete()
 
     URL = "https://codeforces.com/api/problemset.problems"
@@ -74,9 +76,13 @@ def update_problemset():
     if data == [] or not "problems" in data:
         return
 
+    FetchData.objects.using("problemset").all().delete()
+    fd = FetchData()
+    fd.save(using="problemset")
+
     problemset = data["problems"]
 
-    for problem in problemset[:100]:
+    for problem in problemset[:30]:
         if (
             problem["type"] != "PROGRAMMING"
             or not "rating" in problem
@@ -87,7 +93,7 @@ def update_problemset():
         if represents_int(problem["index"]):
             continue
 
-        if Problem.objects.filter(
+        if Problem.objects.using("problemset").filter(
             contest_id=problem["contestId"], index=problem["index"]
         ):
             continue
@@ -98,7 +104,7 @@ def update_problemset():
             rating=problem["rating"],
             index=problem["index"],
         )
-        p.save()
+        p.save(using="problemset")
 
 
 def get_latest_submissions(handle, cnt=500):
@@ -181,7 +187,7 @@ def get_challenge(handle, user_rating, rating):
     res = []
 
     for rt in rating:
-        problemset = Problem.objects.filter(rating=rt)
+        problemset = Problem.objects.using("problemset").filter(rating=rt)
 
         if len(problemset) == 0:
             continue
@@ -246,7 +252,9 @@ def validate_solution(handle, problem_id, deadline):
 
 
 def accept_challenge(profile, contest_id, index):
-    contest = Problem.objects.filter(contest_id=contest_id, index=index)
+    contest = Problem.objects.using("problemset").filter(
+        contest_id=contest_id, index=index
+    )
 
     if len(contest) == 0:
         return
@@ -300,7 +308,9 @@ def validate_challenge(profile):
     contest_id, index = parse_problem_id(profile.current_problem)
     contest_id = int(contest_id)
 
-    problem = Problem.objects.get(contest_id=contest_id, index=index)
+    problem = Problem.objects.using("problemset").get(
+        contest_id=contest_id, index=index
+    )
 
     if timezone.now() > profile.deadline:
         delta = 0
@@ -408,7 +418,9 @@ def give_up_problem(profile):
     contest_id, index = parse_problem_id(profile.current_problem)
     contest_id = int(contest_id)
 
-    problem = Problem.objects.get(contest_id=contest_id, index=index)
+    problem = Problem.objects.using("problemset").get(
+        contest_id=contest_id, index=index
+    )
     delta = rating_loss(profile.virtual_rating, problem.rating)
 
     apply_rating_change(profile, delta, problem)
@@ -466,7 +478,7 @@ def undergoing_auth_query(handle):
 
 def get_random_problem():
     id = randint(1, 6000)
-    pp = Problem.objects.all()
+    pp = Problem.objects.using("problemset").all()
     return pp[id]
 
 

@@ -11,9 +11,9 @@ Variables are named accordingly to the api.
 
 class Problem(models.Model):
     contest_id = models.IntegerField(default=1)
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, default="codeforces")
     rating = models.IntegerField(default=1500)
-    index = models.CharField(max_length=4)
+    index = models.CharField(max_length=4, default="A")
 
     def __str__(self):
         return (
@@ -34,8 +34,8 @@ rating_progress = python list stored in string type through 'repr' method, later
 
 
 class Profile(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    handle = models.CharField(max_length=40)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+    handle = models.CharField(max_length=40, default="Mike")
     registration_date = models.DateField(auto_now_add=True)
     rating_progress = models.CharField(max_length=1000, default="[]")
     virtual_rating = models.IntegerField(default=1400)
@@ -50,12 +50,12 @@ class Profile(models.Model):
 
 
 class AuthQuery(models.Model):
-    handle = models.CharField(max_length=40)
-    password = models.CharField(max_length=128)
+    handle = models.CharField(max_length=40, default="mike")
+    password = models.CharField(max_length=128, default="bruh")
     date = models.DateTimeField(auto_now_add=True)
     rating = models.IntegerField(default=1400)
     contest_id = models.IntegerField(default=1400)
-    index = models.CharField(max_length=4)
+    index = models.CharField(max_length=4, default="A")
     valid = models.BooleanField(default=False)
 
 
