@@ -76,9 +76,7 @@ DATABASES = {
         "ENGINE": "djongo",
         "NAME": "arugo",
         "ENFORCE_SCHEMA": False,
-        "CLIENT": {
-            "host": "mongodb+srv://p:p@cluster0.lu4wq.mongodb.net/arugo?retryWrites=true&w=majority"
-        },
+        "CLIENT": {"host": os.getenv("DB_URL")},
     },
 }
 
