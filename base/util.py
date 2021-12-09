@@ -288,10 +288,11 @@ def apply_rating_change(profile, delta, problem, direct_apply=False):
 
     history = eval(profile.history)
     history.append((problem.contest_id, problem.index, delta))
-    profile.history = repr(history)
 
-    if len(history) > 20:
+    while len(history) > 25:
         history.pop(0)
+
+    profile.history = repr(history)
 
     profile.in_progress = False
     profile.save()
