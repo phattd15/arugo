@@ -19,6 +19,7 @@ def index(request):
     context["user_count"] = len(User.objects.all())
 
     if request.user.is_authenticated:
+        print(user.username)
         profile = Profile.objects.get(user=user)
 
         if request.method == "POST" and user.check_password(
@@ -109,6 +110,8 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
+            username = update_username(username)
+            user = authenticate(request, username=username, password=password)
             login(request, user)
             response = redirect("home-page")
             return response

@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from io import StringIO
 import numpy as np
 import math
-
+import requests
 
 def read_data(url):
     try:
@@ -542,3 +542,32 @@ def validate_auth_query(query):
 def discard_challenge(profile):
     profile.in_progress = False
     profile.save()
+
+def update_username(username):
+    url = 'https://codeforces.com/profile/' + username
+    res = requests.get(url)
+    res_url = res.url
+    slash_pos = 0
+    for i in range(len(res_url)):
+        if res_url[i] == '/':
+            slash_pos = i
+    nxt_username = res_url[(slash_pos + 1):]
+    # return nxt_username
+
+    if nxt_username != username:
+        user = User.objects.get(username=username)
+        profile = Profile.objects.get(handle=username)
+        queries = AuthQuery.objects.filter(handle=username)
+
+        if len(queries):
+            queries.delete()
+
+        profile.handle = nxt_username
+        profile.save()
+
+        user.username = nxt_username
+        user.save()
+
+        print("updated to " + nxt_username)
+        
+    return nxt_username
