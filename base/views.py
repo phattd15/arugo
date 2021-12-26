@@ -61,7 +61,7 @@ def challenge_list(request):
 
     fd = FetchData.objects.using("problemset").all()
 
-    if fd[0].last_update + timedelta(hours=12) < timezone.now():
+    if fd[0].last_update + timedelta(hours=6) < timezone.now():
         update_problemset()
 
     if request.method == "POST":
@@ -69,8 +69,7 @@ def challenge_list(request):
         index = request.POST.get("index")
 
         if represents_int(contest_id):
-            accept_challenge(profile, int(contest_id), index)
-            return redirect("challenge")
+            return redirect("confirm", contest_id=contest_id, index=index)
 
     handle = profile.handle
     rating = profile.virtual_rating
@@ -340,3 +339,34 @@ def discard(request):
 
 def testing(request):
     return render(request, "test.html")
+
+def confirm(request, contest_id, index):
+    if not request.user.is_authenticated:
+        return redirect("home-page")
+    contest = Problem.objects.using("problemset").filter(
+        contest_id=contest_id, index=index
+    )
+    if len(contest) == 0:
+        return redirect("list")
+    user = request.user
+    profile = Profile.objects.get(user=user)
+    if profile.in_progress:
+        return redirect("challenge")
+    problem = Problem.objects.using("problemset").get(
+        contest_id=contest_id, index=index
+    )
+    color, bg_color = rating_color(problem.rating)
+    context = {}
+    context["problem"] = problem
+    context["api_is_down"] = not validate_handle(profile.handle)
+    context["color"] = color
+    context["bg_color"] = bg_color
+    context["gain"] = rating_gain(profile.virtual_rating, problem.rating)
+    context["loss"] = rating_loss(profile.virtual_rating, problem.rating)
+    context["user"] = request.user
+    context["profile"] = profile
+    context["xcolor"] = color_rating_2(problem.rating)
+    if request.method == 'POST':
+        accept_challenge(profile, contest_id, index)
+        return redirect("challenge")
+    return render(request, "confirm.html", context)

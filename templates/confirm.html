@@ -1,0 +1,34 @@
+{% extends 'main.html' %} {% block content %}
+<div class="container">
+    <h1 class="display-1">Choosing Challenge</h1>
+    <div
+        class="alert"
+        style="border-width: 2px; border-color: {{color}}; background-color: {{bg_color}}"
+    >
+        <div class="container">
+            <a
+                class="btn btn-success btn-lg left-text"
+                style="background-color: {{xcolor}};"
+                href="https://codeforces.com/contest/{{problem.contest_id}}/problem/{{problem.index}}"
+                target="_blank"
+            >
+                {{ problem }}
+            </a>
+        </div>
+        <div class="container">
+            <p>
+                Rating delta: <span class="text-success">{{gain}}</span> |
+                <span class="text-danger">{{loss}}</span>
+            </p>
+            <p>Please confirm if you are taking this challenge.</p>
+        </div>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="container">
+                <input type="submit" class="btn btn-primary" value="Accept" />
+                <a class="btn btn-warning" href="{% url 'list' %}"> Decline </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}

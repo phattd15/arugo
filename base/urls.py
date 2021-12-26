@@ -16,4 +16,5 @@ urlpatterns = [
     path("discard/", views.discard, name="discard"),
     path("", views.index, name="home-page"),
     path("test/", views.testing, name="test"),
+    path("confirm/<int:contest_id>/<str:index>/", views.confirm, name="confirm")
 ]

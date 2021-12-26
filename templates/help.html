@@ -1,49 +1,89 @@
-{% extends 'main.html' %}
-{% block content %}
+{% extends 'main.html' %} {% block content %}
 <div class="container">
-    <h1 class="display-1">Help & About</h1>
-</div>
-<div style="text-align: justify; text-justify: inter-word;">
     <div class="container">
-        <p class="h4">What is this site?
-        </p>
-        <p>This site helps users that want to do practice and can keep track of their progress through a virtual rating
-            system. You can assign yourself with an initial rating, do practice based on random suggested problems and
-            earn a virtual rating through it. This site is inspired by my past training days, which I always wanted to
-            have something like this to aid my training.</p><hr>
+        <h1 class="display-1">Help & About</h1>
     </div>
-    <div class="container">
-        <p class="h4">How do I register?</p>
-        <p> First, you must have a codeforces account. Then, to register for this site you need to show the ownership of
-            the account by submitting a compile error solution to a certain problem that was required. Please make sure that by the time you
-            submit the request, CE is the last submission. The process is very similar to the TLE discord bot. </p><hr>
-    </div>
-    <div class="container">
-        <p class="h4">How to submit a compile error?</p>
-        <p>You can submit a nonsense solution in c++ to that problem.</p><hr>
-    </div>
-    <div class="container">
-        <p class="h4">How to take a challenge?</p>
-        <p>First, go to the "list" section and pick up a problem of your preference. You can take a brief look at the
-            problem through the link and can decide whether to take it or not (though I recommend taking it without
-            peeking). After that, the problem list will be locked and you will have 80 minutes to finish the challenge
-            at the "challenge" site. If you have the problem accepted, please refresh or reaccess the challenge site to
-            validate your solution. Please make sure that the last submission is also the accepted one. Or else, when 80
-            minutes mark passes and you could not solve it or you gave up, your rating will get reduced.</p><hr>
-    </div>
-    <div class="container">
-        <p class="h4">What is my rating progress?</p>
-        <p>Your rating progress is the initial rating when you registered for this account. And by taking challenges,
-            your virtual rating will change and you can view the last 30 changes through the graph.</p><hr>
-    </div>
-    <div class="container">
-        <p class="h4">What is the formula to my rating change?</p>
-        <p> Incase that you successfully solve the problem, your rating will increases by $$\min(magnitude*10, \lfloor \frac{0.5*magnitude}{\frac{1.15}{1 + 10^{\frac{problem\_rating - user\_rating}{500}}}} \rfloor)$$ Else decreases by $$\min(magnitude*10, \lfloor \frac{0.5*magnitude}{1 - \frac{1}{1 + 10^{\frac{problem\_rating - user\_rating}{500}}}} \rfloor)$$ Here, magnitude is 16, which means if you solve a problem of your own rating range, then solving 7 of it should take you 100 rating above.</p>
-        <hr>
-    </div>
-    <div class="container">
-        <p class="h4">I forgot my password or want to change the rating level?</p>
-        <p>Do the same as in the registration process. The site will update your new info.</p>
+    <div style="text-align: justify; text-justify: inter-word">
+        <div class="container">
+            <p class="h4">What is this site?</p>
+            <p>
+                This site helps users that want to do practice and can keep
+                track of their progress through a virtual rating system. You can
+                assign yourself with an initial rating, do practice based on
+                random suggested problems and earn a virtual rating through it.
+                This site is inspired by my past training days, which I always
+                wanted to have something like this to aid my training.
+            </p>
+            <hr />
+        </div>
+        <div class="container">
+            <p class="h4">How do I register?</p>
+            <p>
+                First, you must have a codeforces account. Then, to register for
+                this site you need to show the ownership of the account by
+                submitting a compile error solution to a certain problem that
+                was required. Please make sure that by the time you submit the
+                request, CE is the last submission. The process is very similar
+                to the TLE discord bot.
+            </p>
+            <hr />
+        </div>
+        <div class="container">
+            <p class="h4">How to submit a compile error?</p>
+            <p>You can submit a nonsense solution in c++ to that problem.</p>
+            <hr />
+        </div>
+        <div class="container">
+            <p class="h4">How to take a challenge?</p>
+            <p>
+                First, go to the "list" section and pick up a problem of your
+                preference. You can take a brief look at the problem through the
+                link and can decide whether to take it or not (though I
+                recommend taking it without peeking). After that, the problem
+                list will be locked and you will have 80 minutes to finish the
+                challenge at the "challenge" site. If you have the problem
+                accepted, please refresh or reaccess the challenge site to
+                validate your solution. Please make sure that the last
+                submission is also the accepted one. Or else, when 80 minutes
+                mark passes and you could not solve it or you gave up, your
+                rating will get reduced.
+            </p>
+            <hr />
+        </div>
+        <div class="container">
+            <p class="h4">What is my rating progress?</p>
+            <p>
+                Your rating progress is the initial rating when you registered
+                for this account. And by taking challenges, your virtual rating
+                will change and you can view the last 30 changes through the
+                graph.
+            </p>
+            <hr />
+        </div>
+        <div class="container">
+            <p class="h4">What is the formula to my rating change?</p>
+            <p>
+                Incase that you successfully solve the problem, your rating will
+                increases by $$\min(magnitude*10, \lfloor
+                \frac{0.5*magnitude}{\frac{1.15}{1 + 10^{\frac{problem\_rating -
+                user\_rating}{500}}}} \rfloor)$$ Else decreases by
+                $$\min(magnitude*10, \lfloor \frac{0.5*magnitude}{1 - \frac{1}{1
+                + 10^{\frac{problem\_rating - user\_rating}{500}}}} \rfloor)$$
+                Here, magnitude is 16, which means if you solve a problem of
+                your own rating range, then solving 7 of it should take you 100
+                rating above.
+            </p>
+            <hr />
+        </div>
+        <div class="container">
+            <p class="h4">
+                I forgot my password or want to change the rating level?
+            </p>
+            <p>
+                Do the same as in the registration process. The site will update
+                your new info.
+            </p>
+        </div>
     </div>
 </div>
 {% endblock content %}

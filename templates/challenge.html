@@ -1,25 +1,33 @@
-{% extends 'main.html' %}
-
-{% block content %}
+{% extends 'main.html' %} {% block content %}
 <div class="container">
-    <h1 class="display-1">
-        Current Challenge
-    </h1>
-    <div class="alert" style="border-width: 2px; border-color: {{color}}; background-color: {{bg_color}}">
+    <h1 class="display-1">Current Challenge</h1>
+    <div
+        class="alert"
+        style="border-width: 2px; border-color: {{color}}; background-color: {{bg_color}}"
+    >
         <div class="container">
-            <a class="btn btn-success btn-lg left-text" style="background-color: {{xcolor}};"
-                href="https://codeforces.com/contest/{{problem.contest_id}}/problem/{{problem.index}}" target="_blank">
-                {{ problem }} </a>
+            <a
+                class="btn btn-success btn-lg left-text"
+                style="background-color: {{xcolor}};"
+                href="https://codeforces.com/contest/{{problem.contest_id}}/problem/{{problem.index}}"
+                target="_blank"
+            >
+                {{ problem }}
+            </a>
         </div>
         <div class="container">
             <p id="time_left">
-                Total time left for the challenge: {{minutes}} minutes {{seconds}} seconds.
+                Total time left for the challenge: {{minutes}} minutes
+                {{seconds}} seconds.
             </p>
             <p>
-                Rating delta: <span class="text-success">{{gain}}</span> | <span class="text-danger">{{loss}}</span>
+                Rating delta: <span class="text-success">{{gain}}</span> |
+                <span class="text-danger">{{loss}}</span>
             </p>
             <p>
-                Please refresh the page or hit the validate right the moment you got the problem accepted. The page will also refresh the data every 2 minutes.
+                Please refresh the page or hit the validate right the moment you
+                got the problem accepted. The page will also refresh the data
+                every 2 minutes.
             </p>
         </div>
         <div class="container">
