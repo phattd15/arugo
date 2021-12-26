@@ -19,7 +19,7 @@
                 Rating delta: <span class="text-success">{{gain}}</span> | <span class="text-danger">{{loss}}</span>
             </p>
             <p>
-                Please refresh the page or hit the validate right the moment you got the problem accepted.
+                Please refresh the page or hit the validate right the moment you got the problem accepted. The page will also refresh the data every 2 minutes.
             </p>
         </div>
         <div class="container">
@@ -49,6 +49,9 @@
                 document.getElementById("time_left").innerHTML = "Total time left for the challenge: " + m + " minutes " + s + " seconds."
             } else {
                 document.getElementById("time_left").innerHTML = "Time is up."
+                document.location.reload(true);
+            }
+            if (s == 5 && m % 2 == 0) {
                 document.location.reload(true);
             }
         }, 1000);

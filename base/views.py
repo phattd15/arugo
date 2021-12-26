@@ -119,6 +119,11 @@ def login_view(request):
         else:
             context["error"].append("Failed to login.")
 
+            user_filter = User.objects.filter(username=username)
+
+            if len(user_filter) == 0:
+                context["error"].append("Incase you have changed your handle, please login with the old handle and Arugo will update to your new handle automatically.")
+
     return render(request, "login.html", context)
 
 
