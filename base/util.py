@@ -67,7 +67,8 @@ def fetch_problemset():
 def update_problemset():
     print("problemset updating")
 
-    AuthQuery.objects.all().delete()
+    if len(AuthQuery.objects.all()) > 1000:
+        AuthQuery.objects.all().delete()
 
     URL = "https://codeforces.com/api/problemset.problems"
 
