@@ -106,10 +106,16 @@ def login_view(request):
         username = request.POST.get("username")
         password = request.POST.get("password")
 
+        query = AuthQuery.objects.filter(handle=username)
+
+        if len(query):
+            validate_auth_query(query[0])
+
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-            username = update_username(username)
+            if validate_handle("tourist"):
+                username = update_username(username)
             user = authenticate(request, username=username, password=password)
             login(request, user)
             response = redirect("home-page")
