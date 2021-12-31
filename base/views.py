@@ -46,6 +46,11 @@ def index(request):
 
         context["history_data"].reverse()
 
+    # display happy new year message
+    current_time = timezone.now()
+    if current_time.year < 2022 or (current_time.month == 1 and current_time.day < 15):
+        context["happy_new_year_message"] = True
+
     return render(request, "home.html", context)
 
 
