@@ -154,6 +154,10 @@ def register(request):
     context["error"] = []
     context["contest_id"] = ""
     context["index"] = ""
+    api_is_down = not validate_handle("tourist")
+
+    if api_is_down:
+        context["error"].append(("The Codeforces API is currently unavailable, please comeback later", False))
 
     if request.method == "POST":
         username = request.POST.get("username")
