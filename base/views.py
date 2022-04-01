@@ -66,7 +66,10 @@ def challenge_list(request):
 
     fd = FetchData.objects.using("problemset").all()
 
-    if fd[0].last_update + timedelta(hours=6) < timezone.now():
+    if len(fd) == 0:
+        update_problemset()
+
+    elif fd[0].last_update + timedelta(hours=6) < timezone.now():
         update_problemset()
 
     if request.method == "POST":
