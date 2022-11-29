@@ -1,4 +1,5 @@
 *.env
+/venv
 /arugo/.env
 /db.sqlite3
 /base/__pycache__/

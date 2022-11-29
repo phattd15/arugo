@@ -1,6 +1,5 @@
 from pathlib import Path
 import os
-import django_heroku
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -68,21 +67,29 @@ WSGI_APPLICATION = "arugo.wsgi.application"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 
-MONGODB_URI = os.getenv("DB_URL")
+POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
+POSTGRES_USER = os.getenv("POSTGRES_USER")
+POSTGRES_HOST = os.getenv("POSTGRES_HOST")
+POSTGRES_NAME = os.getenv("POSTGRES_NAME")
+POSTGRES_PORT = os.getenv("POSTGRES_PORT")
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": POSTGRES_NAME,
+        "USER": POSTGRES_USER,
+        "PASSWORD": POSTGRES_PASSWORD,
+        "PORT": POSTGRES_PORT,
+        "HOST": POSTGRES_HOST
     },
     "problemset": {
-        "ENGINE": "djongo",
-        "NAME": "arugo",
-        "ENFORCE_SCHEMA": False,
-        "CLIENT": {
-            "host": MONGODB_URI,
-        },
-    },
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": POSTGRES_NAME,
+        "USER": POSTGRES_USER,
+        "PASSWORD": POSTGRES_PASSWORD,
+        "PORT": POSTGRES_PORT,
+        "HOST": POSTGRES_HOST
+    }
 }
 
 
@@ -133,5 +140,3 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-django_heroku.settings(locals())
