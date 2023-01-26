@@ -13,21 +13,21 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script type="text/javascript" id="MathJax-script" async
-    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
     </script>
-    
+
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample08"
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample08"
             aria-controls="navbarsExample08" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-        <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExample08">
-            <ul class="navbar-nav">
-                {% if not user.is_authenticated %}
+    <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExample08">
+        <ul class="navbar-nav">
+            {% if not user.is_authenticated %}
                 <li class="nav-item active">
                     <a class="nav-link" href="{% url 'home-page' %}"> Arugo </a>
                 </li>
@@ -37,40 +37,40 @@
                 <li class="nav-item">
                     <a class="nav-item nav-link" href="{% url 'register' %}"> Register </a>
                 </li>
-                {% else %}
+            {% else %}
                 <li class="nav-item">
-                    <a class="nav-item nav-link" href="{% url 'home-page' %}"> {{profile.handle}} </a>
+                    <a class="nav-item nav-link" href="{% url 'home-page' %}"> {{ profile.handle }} </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-item nav-link" href="{% url 'logout' %}"> Logout </a>
                 </li>
-                    {% if profile.in_progress %}
-                        <li class="nav-item">
-                            <a class="nav-item nav-link" href="{% url 'challenge' %}"> Challenge </a>
-                        </li>
-                    {% else %}
-                        <li class="nav-item">
-                            <a class="nav-item nav-link" href="{% url 'list' %}"> List </a>
-                        </li>
-                    {% endif %}
+                {% if profile.in_progress %}
+                    <li class="nav-item">
+                        <a class="nav-item nav-link" href="{% url 'challenge' %}"> Challenge </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-item nav-link" href="{% url 'list' %}"> List </a>
+                    </li>
                 {% endif %}
+            {% endif %}
 
-                <li class="nav-item">
-                    <a class="nav-item nav-link" href="{% url 'help' %}"> About / Help </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-item nav-link" href="https://github.com/polarity-cf/arugo" target="_blank"> Github </a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-    <br>
-    <br>
-    <div class="container">
-        {% block content %}
-        {% endblock content %}
+            <li class="nav-item">
+                <a class="nav-item nav-link" href="{% url 'help' %}"> About / Help </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-item nav-link" href="https://github.com/polarity-cf/arugo" target="_blank"> Github </a>
+            </li>
+        </ul>
     </div>
-    <!-- Bootstrap core JavaScript
+</nav>
+<br>
+<br>
+<div class="container">
+    {% block content %}
+    {% endblock content %}
+</div>
+<!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 </body>

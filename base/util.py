@@ -1,16 +1,18 @@
-from .models import AuthQuery, Problem, Profile
-from django.contrib.auth.models import User
 import json
-from urllib.request import urlopen
-from .models import Problem, FetchData
-from random import randint
-from datetime import datetime, timedelta
-from django.utils import timezone
-import matplotlib.pyplot as plt
-from io import StringIO
-import numpy as np
 import math
+from datetime import timedelta
+from io import StringIO
+from random import randint
+from urllib.request import urlopen
+
+import matplotlib.pyplot as plt
 import requests
+from django.contrib.auth.models import User
+from django.utils import timezone
+
+from .models import AuthQuery, Profile
+from .models import Problem, FetchData
+
 
 def read_data(url):
     try:
@@ -31,11 +33,11 @@ def read_data(url):
 def fetch_problemset():
     URL = "https://codeforces.com/api/problemset.problems"
 
-    FetchData.objects.using("problemset").all().delete()
-    Problem.objects.using("problemset").all().delete()
+    FetchData.objects.all().delete()
+    Problem.objects.all().delete()
 
     fd = FetchData()
-    fd.save(using="problemset")
+    fd.save()
 
     data = read_data(URL)
 
@@ -44,24 +46,31 @@ def fetch_problemset():
 
     problemset = data["problems"]
 
+    successful_saved = 0
     for problem in problemset:
         if (
-            problem["type"] != "PROGRAMMING"
-            or not "rating" in problem
-            or "*special" in problem["tags"]
+                problem["type"] != "PROGRAMMING"
+                or not "rating" in problem
+                or "*special" in problem["tags"]
         ):
             continue
 
         if represents_int(problem["index"]):
             continue
 
-        p = Problem(
-            contest_id=problem["contestId"],
-            name=problem["name"],
-            rating=problem["rating"],
-            index=problem["index"],
-        )
-        p.save(using="problemset")
+        try:
+            p = Problem(
+                contest_id=problem["contestId"],
+                name=problem["name"],
+                rating=problem["rating"],
+                index=problem["index"],
+            )
+            p.save()
+            successful_saved += 1
+            print(successful_saved)
+
+        except:
+            print("failed with ", problem)
 
 
 def update_problemset():
@@ -77,25 +86,25 @@ def update_problemset():
     if data == [] or not "problems" in data:
         return
 
-    FetchData.objects.using("problemset").all().delete()
+    FetchData.objects.all().delete()
     fd = FetchData()
-    fd.save(using="problemset")
+    fd.save()
 
     problemset = data["problems"]
 
     for problem in problemset[:30]:
         if (
-            problem["type"] != "PROGRAMMING"
-            or not "rating" in problem
-            or "*special" in problem["tags"]
+                problem["type"] != "PROGRAMMING"
+                or not "rating" in problem
+                or "*special" in problem["tags"]
         ):
             continue
 
         if represents_int(problem["index"]):
             continue
 
-        if Problem.objects.using("problemset").filter(
-            contest_id=problem["contestId"], index=problem["index"]
+        if Problem.objects.filter(
+                contest_id=problem["contestId"], index=problem["index"]
         ):
             continue
 
@@ -105,7 +114,7 @@ def update_problemset():
             rating=problem["rating"],
             index=problem["index"],
         )
-        p.save(using="problemset")
+        p.save()
 
 
 def get_latest_submissions(handle, cnt=500):
@@ -188,7 +197,7 @@ def get_challenge(handle, user_rating, rating):
     res = []
 
     for rt in rating:
-        problemset = Problem.objects.using("problemset").filter(rating=rt)
+        problemset = Problem.objects.filter(rating=rt)
 
         if len(problemset) == 0:
             continue
@@ -241,11 +250,11 @@ def validate_solution(handle, problem_id, deadline):
     for submission in latest_data:
         if safe_submission(submission):
             if (
-                submission["creationTimeSeconds"] < deadline.timestamp()
-                and submission["verdict"] == "OK"
-                and str(submission["problem"]["contestId"])
-                + submission["problem"]["index"]
-                == problem_id
+                    submission["creationTimeSeconds"] < deadline.timestamp()
+                    and submission["verdict"] == "OK"
+                    and str(submission["problem"]["contestId"])
+                    + submission["problem"]["index"]
+                    == problem_id
             ):
                 return True
 
@@ -253,7 +262,7 @@ def validate_solution(handle, problem_id, deadline):
 
 
 def accept_challenge(profile, contest_id, index):
-    contest = Problem.objects.using("problemset").filter(
+    contest = Problem.objects.filter(
         contest_id=contest_id, index=index
     )
 
@@ -310,7 +319,7 @@ def validate_challenge(profile):
     contest_id, index = parse_problem_id(profile.current_problem)
     contest_id = int(contest_id)
 
-    problem = Problem.objects.using("problemset").get(
+    problem = Problem.objects.get(
         contest_id=contest_id, index=index
     )
 
@@ -420,7 +429,7 @@ def give_up_problem(profile):
     contest_id, index = parse_problem_id(profile.current_problem)
     contest_id = int(contest_id)
 
-    problem = Problem.objects.using("problemset").get(
+    problem = Problem.objects.get(
         contest_id=contest_id, index=index
     )
     delta = rating_loss(profile.virtual_rating, problem.rating)
@@ -479,8 +488,8 @@ def undergoing_auth_query(handle):
 
 
 def get_random_problem():
-    id = randint(1, 6000)
-    pp = Problem.objects.using("problemset").all()
+    id = randint(1, 7800)
+    pp = Problem.objects.all()
     return pp[id]
 
 
@@ -496,9 +505,9 @@ def validate_auth_query(query):
     sub_time = latest_data[0]["creationTimeSeconds"]
 
     if (
-        len(latest_data) > 0
-        and latest_data[0]["problem"]["contestId"] == query.contest_id
-        and latest_data[0]["problem"]["index"] == query.index
+            len(latest_data) > 0
+            and latest_data[0]["problem"]["contestId"] == query.contest_id
+            and latest_data[0]["problem"]["index"] == query.index
     ):
         deadline = query.date + timedelta(minutes=2)
         if sub_time > query.date.timestamp() and sub_time < deadline.timestamp():
@@ -544,6 +553,7 @@ def discard_challenge(profile):
     profile.in_progress = False
     profile.save()
 
+
 def update_username(username):
     url = 'https://codeforces.com/profile/' + username
     res = requests.get(url)
@@ -570,5 +580,5 @@ def update_username(username):
         user.save()
 
         print("updated to " + nxt_username)
-        
+
     return nxt_username

@@ -1,10 +1,7 @@
-from datetime import time
-from django.shortcuts import redirect, render
-from .models import Profile, Problem, AuthQuery
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import redirect
 from django.contrib.auth.hashers import make_password
+from django.shortcuts import redirect
+from django.shortcuts import render
 
 from .util import *
 
@@ -23,7 +20,7 @@ def index(request):
         profile = Profile.objects.get(user=user)
 
         if request.method == "POST" and user.check_password(
-            request.POST.get("password")
+                request.POST.get("password")
         ):
             return redirect("reset-progress")
 
@@ -38,7 +35,7 @@ def index(request):
         context["history_data"] = []
 
         for contest_id, index, delta in history:
-            problem = Problem.objects.using("problemset").get(
+            problem = Problem.objects.get(
                 contest_id=contest_id, index=index
             )
             color, bg_color = rating_color(problem.rating)
@@ -64,7 +61,7 @@ def challenge_list(request):
     if profile.in_progress:
         return redirect("challenge")
 
-    fd = FetchData.objects.using("problemset").all()
+    fd = FetchData.objects.all()
 
     if len(fd) == 0:
         update_problemset()
@@ -135,7 +132,8 @@ def login_view(request):
             user_filter = User.objects.filter(username=username)
 
             if len(user_filter) == 0:
-                context["error"].append("Incase you have changed your handle, please login with the old handle and Arugo will update to your new handle automatically.")
+                context["error"].append(
+                    "Incase you have changed your handle, please login with the old handle and Arugo will update to your new handle automatically.")
 
     return render(request, "login.html", context)
 
@@ -268,7 +266,7 @@ def challenge_site(request):
     profile.save()
 
     contest_id, index = parse_problem_id(profile.current_problem)
-    problem = Problem.objects.using("problemset").get(
+    problem = Problem.objects.get(
         contest_id=contest_id, index=index
     )
     color, bg_color = rating_color(problem.rating)
@@ -358,10 +356,11 @@ def discard(request):
 def testing(request):
     return render(request, "test.html")
 
+
 def confirm(request, contest_id, index):
     if not request.user.is_authenticated:
         return redirect("home-page")
-    contest = Problem.objects.using("problemset").filter(
+    contest = Problem.objects.filter(
         contest_id=contest_id, index=index
     )
     if len(contest) == 0:
@@ -370,7 +369,7 @@ def confirm(request, contest_id, index):
     profile = Profile.objects.get(user=user)
     if profile.in_progress:
         return redirect("challenge")
-    problem = Problem.objects.using("problemset").get(
+    problem = Problem.objects.get(
         contest_id=contest_id, index=index
     )
     color, bg_color = rating_color(problem.rating)

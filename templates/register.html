@@ -1,41 +1,44 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<div class="container">
-    <h1 class="display-1"> Register </h1>
-    <p>
-        Virtual rating is the rating level you are currently in or the one you want to start with.
-    </p>
-    {% for err, ok_err in error%}
-    {% if ok_err%}
-    <div class="alert alert-warning" role="alert">
-        {{err}} <a href="https://codeforces.com/contest/{{contest_id}}/problem/{{index}}" target="_blank">{{contest_id}}{{index}}</a>. After that hit the validate button down below. Please make sure that when you validate the request, CE is the last submission from your account to Codeforces. The request will expires in 2 minutes.
+    <div class="container">
+        <h1 class="display-1"> Register </h1>
+        <p>
+            Virtual rating is the rating level you are currently in or the one you want to start with.
+        </p>
+        {% for err, ok_err in error %}
+            {% if ok_err %}
+                <div class="alert alert-warning" role="alert">
+                    {{ err }} <a href="https://codeforces.com/contest/{{ contest_id }}/problem/{{ index }}"
+                                 target="_blank">{{ contest_id }}{{ index }}</a>. After that hit the validate button
+                    down below. Please make sure that when you validate the request, CE is the last submission from your
+                    account to Codeforces. The request will expires in 2 minutes.
+                </div>
+            {% else %}
+                <div class="alert alert-danger" role="alert">
+                    {{ err }}
+                </div>
+            {% endif %}
+        {% endfor %}
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Username / Codeforces Handle </label>
+                <input type="username" class="form-control" id="username" name="username"
+                       placeholder="Example: tourist, ...">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password" name="password">
+            </div>
+            <div class="form-group">
+                <label for="rating">Virtual rating</label>
+                <input type="text" class="form-control" id="rating" placeholder="Your expected rating"
+                       name="rating">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a class="btn btn-warning" href="{% url 'validate' %}">Validate the request</a>
+        </form>
     </div>
-    {% else %}
-    <div class="alert alert-danger" role="alert">
-        {{err}}
-    </div>
-    {% endif %}
-    {% endfor %}
-    <form method="POST">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="username">Username / Codeforces Handle </label>
-            <input type="username" class="form-control" id="username" name="username"
-                placeholder="Example: tourist, ...">
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" placeholder="Password" name="password">
-        </div>
-        <div class="form-group">
-            <label for="rating">Virtual rating</label>
-            <input type="text" class="form-control" id="rating" placeholder="Your expected rating"
-                name="rating">
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-        <a class="btn btn-warning" href="{%url 'validate'%}">Validate the request</a>
-    </form>
-</div>
 
 {% endblock content %}

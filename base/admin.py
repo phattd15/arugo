@@ -1,8 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
-
 from .models import AuthQuery, FetchData, Problem, Profile
+
+# Register your models here.
 
 admin.site.register(Problem)
 admin.site.register(Profile)

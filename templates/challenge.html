@@ -1,68 +1,68 @@
 {% extends 'main.html' %} {% block content %}
-<div class="container">
-    <h1 class="display-1">Current Challenge</h1>
-    <div
-        class="alert"
-        style="border-width: 2px; border-color: {{color}}; background-color: {{bg_color}}"
-    >
-        <div class="container">
-            <a
-                class="btn btn-success btn-lg left-text"
-                style="background-color: {{xcolor}};"
-                href="https://codeforces.com/contest/{{problem.contest_id}}/problem/{{problem.index}}"
-                target="_blank"
-            >
-                {{ problem }}
-            </a>
+    <div class="container">
+        <h1 class="display-1">Current Challenge</h1>
+        <div
+                class="alert"
+                style="border-width: 2px; border-color: {{ color }}; background-color: {{ bg_color }}"
+        >
+            <div class="container">
+                <a
+                        class="btn btn-success btn-lg left-text"
+                        style="background-color: {{ xcolor }};"
+                        href="https://codeforces.com/contest/{{ problem.contest_id }}/problem/{{ problem.index }}"
+                        target="_blank"
+                >
+                    {{ problem }}
+                </a>
+            </div>
+            <div class="container">
+                <p id="time_left">
+                    Total time left for the challenge: {{ minutes }} minutes
+                    {{ seconds }} seconds.
+                </p>
+                <p>
+                    Rating delta: <span class="text-success">{{ gain }}</span> |
+                    <span class="text-danger">{{ loss }}</span>
+                </p>
+                <p>
+                    Please refresh the page or hit the validate right the moment you
+                    got the problem accepted. The page will also refresh the data
+                    every 2 minutes.
+                </p>
+            </div>
+            <div class="container">
+                <a class="btn btn-warning" href="{% url 'giveup' %}">
+                    Give up :(
+                </a>
+                <a class="btn btn-secondary" href="{% url 'challenge' %}">
+                    Validate
+                </a>
+                {% if api_is_down %}
+                    <a class="btn btn-info" href="{% url 'discard' %}">
+                        Discard challenge (API is currently down)
+                    </a>
+                {% endif %}
+            </div>
         </div>
-        <div class="container">
-            <p id="time_left">
-                Total time left for the challenge: {{minutes}} minutes
-                {{seconds}} seconds.
-            </p>
-            <p>
-                Rating delta: <span class="text-success">{{gain}}</span> |
-                <span class="text-danger">{{loss}}</span>
-            </p>
-            <p>
-                Please refresh the page or hit the validate right the moment you
-                got the problem accepted. The page will also refresh the data
-                every 2 minutes.
-            </p>
-        </div>
-        <div class="container">
-            <a class="btn btn-warning" href="{% url 'giveup' %}">
-                Give up :(
-            </a>
-            <a class="btn btn-secondary" href="{% url 'challenge' %}">
-                Validate
-            </a>
-            {% if api_is_down %}
-            <a class="btn btn-info" href="{% url 'discard' %}">
-                Discard challenge (API is currently down)
-            </a>
-            {% endif %}
-        </div>
-    </div>
-    <script>
-        let m = {{minutes}};
-        let s = {{seconds}};
-        var interval = setInterval(() => {
-            if (!(m == 0 && s == 0)) {
-                if (s > 0) s --;
-                else {
-                    m --;
-                    s = 59;
+        <script>
+            let m = {{minutes}};
+            let s = {{seconds}};
+            var interval = setInterval(() => {
+                if (!(m == 0 && s == 0)) {
+                    if (s > 0) s--;
+                    else {
+                        m--;
+                        s = 59;
+                    }
+                    document.getElementById("time_left").innerHTML = "Total time left for the challenge: " + m + " minutes " + s + " seconds."
+                } else {
+                    document.getElementById("time_left").innerHTML = "Time is up."
+                    document.location.reload(true);
                 }
-                document.getElementById("time_left").innerHTML = "Total time left for the challenge: " + m + " minutes " + s + " seconds."
-            } else {
-                document.getElementById("time_left").innerHTML = "Time is up."
-                document.location.reload(true);
-            }
-            if (s == 5 && m % 2 == 0) {
-                document.location.reload(true);
-            }
-        }, 1000);
-    </script>
-</div>
+                if (s == 5 && m % 2 == 0) {
+                    document.location.reload(true);
+                }
+            }, 1000);
+        </script>
+    </div>
 {% endblock content %}

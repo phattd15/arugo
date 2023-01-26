@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
 
 # Create your models here.
 
@@ -17,12 +17,12 @@ class Problem(models.Model):
 
     def __str__(self):
         return (
-            str(self.contest_id)
-            + self.index
-            + ": "
-            + self.name
-            + ", "
-            + str(self.rating)
+                str(self.contest_id)
+                + self.index
+                + ": "
+                + self.name
+                + ", "
+                + str(self.rating)
         )
 
 

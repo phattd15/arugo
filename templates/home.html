@@ -1,139 +1,126 @@
 {% extends 'main.html' %} {% block content %}
-<div class="container">
-  {% if not user.is_authenticated %}
-  <div class="container">
-    <h1 class="display-1">Welcome to Arugo</h1>
-  </div>
-  <div class="container">
-    <p class="h4">What is this site?</p>
-    <p>
-      This site helps users that want to do practice and can keep track of their
-      progress through a virtual rating system. You can assign yourself with an
-      initial rating, do practice based on random suggested problems and earn a
-      virtual rating through it. This site is inspired by my past training days,
-      which I always wanted to have something like this to aid my training.
-      <a class="link-secondary" href="{% url 'help' %}" target="_blank"
-        >Read more...</a
-      >
-    </p>
-  </div>
-  <div class="container">
-    <p class="h4">Already have an account?</p>
-    <p>
-      Login
-      <a class="link-secondary" href="{% url 'login' %}" target="_blank">
-        here</a
-      >.
-    </p>
-  </div>
-  <div class="container">
-    <p class="h4">New to this site?</p>
-    <p>
-      Register with your Codeforces handle
-      <a class="link-secondary" href="{% url 'register' %}" target="_blank">
-        here</a
-      >.
-    </p>
-  </div>
-  <div class="container">
-    <p class="h4">Arugo @ Codeforces</p>
-    <p>
-      Read the blog about it
-      <a
-        class="link-secondary"
-        href="https://codeforces.com/blog/entry/96830"
-        target="_blank"
-      >
-        here</a
-      >.
-    </p>
-  </div>
-  <div class="container">
-    <p class="h4">Registered users count: {{user_count}}.</p>
-  </div>
-    {%if happy_new_year_message%}
     <div class="container">
-        <p class="h4">Happy new year 2022</p>
-        <p>
-        Thank you to those who have been sticking around with Arugo in 2021 and we
-        have reached the milestone of 1000 users. I wish everyone a successful
-        2022 with a higher rating than before.
-        </p>
+        {% if not user.is_authenticated %}
+            <div class="container">
+                <h1 class="display-1">Welcome to Arugo</h1>
+            </div>
+            <div class="container">
+                <p class="h4">What is this site?</p>
+                <p>
+                    This site helps users that want to do practice and can keep track of their
+                    progress through a virtual rating system. You can assign yourself with an
+                    initial rating, do practice based on random suggested problems and earn a
+                    virtual rating through it. This site is inspired by my past training days,
+                    which I always wanted to have something like this to aid my training.
+                    <a class="link-secondary" href="{% url 'help' %}" target="_blank"
+                    >Read more...</a
+                    >
+                </p>
+            </div>
+            <div class="container">
+                <p class="h4">Already have an account?</p>
+                <p>
+                    Login
+                    <a class="link-secondary" href="{% url 'login' %}" target="_blank">
+                        here</a
+                    >.
+                </p>
+            </div>
+            <div class="container">
+                <p class="h4">New to this site?</p>
+                <p>
+                    Register with your Codeforces handle
+                    <a class="link-secondary" href="{% url 'register' %}" target="_blank">
+                        here</a
+                    >.
+                </p>
+            </div>
+            <div class="container">
+                <p class="h4">Arugo @ Codeforces</p>
+                <p>
+                    Read the blog about it
+                    <a
+                            class="link-secondary"
+                            href="https://codeforces.com/blog/entry/96830"
+                            target="_blank"
+                    >
+                        here</a
+                    >.
+                </p>
+            </div>
+        {% else %}
+            <div class="container">
+                {% if state == 1 %}
+                    <div class="alert alert-success" role="alert">
+                        Congratulate on solving the last problem!
+                    </div>
+                {% elif state == 2 %}
+                    <div class="alert alert-warning" role="alert">
+                        You failed the last challenge :( Try harder ?
+                    </div>
+                {% endif %}
+            </div>
+            <div class="container">
+                <h1 class="display-2">
+                    Hello,
+                    <a
+                            href="https://codeforces.com/profile/{{ profile.handle }}"
+                            style="text-decoration: none"
+                    ><span style="color:{{ xcolor }}">{{ profile.handle }}</span></a
+                    >!
+                </h1>
+                <p>
+                    Your rating:
+                    <span style="color:{{ xcolor }}">{{ profile.virtual_rating }}</span>
+                </p>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <input
+                                type="password"
+                                class="form-control"
+                                id="password"
+                                name="password"
+                                placeholder="Enter password to reset progress."
+                        />
+                        <button type="submit" class="btn btn-primary">Reset</button>
+                    </div>
+                </form>
+            </div>
+            <p>{{ graph|safe }}</p>
+            <p class="h4">User history</p>
+            {% for problem, color, bg_color, delta in history_data %}
+                <div
+                        class="alert container"
+                        style="border-width: 2px; border-color: {{ color }}; background-color: {{ bg_color }};"
+                >
+                    <a
+                            class="btn btn-lg"
+                            style="text-align: left; background-color: {{ bg_color }};"
+                            href="https://codeforces.com/contest/{{ problem.contest_id }}/problem/{{ problem.index }}"
+                            target="_blank"
+                    >
+                        {{ problem }}
+                    </a>
+                    {% if delta >= 0 %}
+                        <a
+                                class="btn btn-outline-success btn-lg"
+                                style="float: right; width: 140px"
+                                href="#"
+                        >
+                            {{ delta }}</a
+                        >
+                    {% else %}
+                        <a
+                                class="btn btn-outline-danger btn-lg"
+                                style="float: right; width: 140px"
+                                href="#"
+                        >
+                            {{ delta }}</a
+                        >
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% endif %}
     </div>
-    {%endif%} 
-  {% else %}
-  <div class="container">
-    {% if state == 1 %}
-    <div class="alert alert-success" role="alert">
-      Congratulate on solving the last problem!
-    </div>
-    {% elif state == 2 %}
-    <div class="alert alert-warning" role="alert">
-      You failed the last challenge :( Try harder ?
-    </div>
-    {% endif %}
-  </div>
-  <div class="container">
-    <h1 class="display-2">
-      Hello,
-      <a
-        href="https://codeforces.com/profile/{{profile.handle}}"
-        style="text-decoration: none"
-        ><span style="color:{{xcolor}}">{{profile.handle}}</span></a
-      >!
-    </h1>
-    <p>
-      Your rating:
-      <span style="color:{{xcolor}}">{{profile.virtual_rating}}</span>
-    </p>
-    <form method="POST">
-      {% csrf_token %}
-      <div class="input-group">
-        <input
-          type="password"
-          class="form-control"
-          id="password"
-          name="password"
-          placeholder="Enter password to reset progress."
-        />
-        <button type="submit" class="btn btn-primary">Reset</button>
-      </div>
-    </form>
-  </div>
-  <p>{{graph|safe}}</p>
-  <p class="h4">User history</p>
-  {% for problem, color, bg_color, delta in history_data %}
-  <div
-    class="alert container"
-    style="border-width: 2px; border-color: {{color}}; background-color: {{bg_color}};"
-  >
-    <a
-      class="btn btn-lg"
-      style="text-align: left; background-color: {{bg_color}};"
-      href="https://codeforces.com/contest/{{problem.contest_id}}/problem/{{problem.index}}"
-      target="_blank"
-    >
-      {{ problem }}
-    </a>
-    {% if delta >= 0 %}
-    <a
-      class="btn btn-outline-success btn-lg"
-      style="float: right; width: 140px"
-      href="#"
-    >
-      {{delta}}</a
-    >
-    {% else %}
-    <a
-      class="btn btn-outline-danger btn-lg"
-      style="float: right; width: 140px"
-      href="#"
-    >
-      {{delta}}</a
-    >
-    {% endif %}
-  </div>
-  {% endfor %} 
-  {% endif %}
-</div>
 {% endblock content %}
