@@ -3,7 +3,7 @@ certifi==2022.12.7
 charset-normalizer==3.0.1
 contourpy==1.0.7
 cycler==0.11.0
-Django==4.1.5
+Django==4.1.6
 fonttools==4.38.0
 gunicorn==20.1.0
 idna==3.4
